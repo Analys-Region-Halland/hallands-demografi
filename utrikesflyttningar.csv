@@ -1,0 +1,985 @@
+Region,År,datakalla,Variabel,Värde
+Falkenberg,2000,historisk,Invandring,299
+Falkenberg,2000,historisk,Utvandring,124
+Falkenberg,2000,historisk,Utrikes flyttnetto,175
+Falkenberg,2001,historisk,Invandring,272
+Falkenberg,2001,historisk,Utvandring,118
+Falkenberg,2001,historisk,Utrikes flyttnetto,154
+Falkenberg,2002,historisk,Invandring,227
+Falkenberg,2002,historisk,Utvandring,102
+Falkenberg,2002,historisk,Utrikes flyttnetto,125
+Falkenberg,2003,historisk,Invandring,214
+Falkenberg,2003,historisk,Utvandring,118
+Falkenberg,2003,historisk,Utrikes flyttnetto,96
+Falkenberg,2004,historisk,Invandring,253
+Falkenberg,2004,historisk,Utvandring,85
+Falkenberg,2004,historisk,Utrikes flyttnetto,168
+Falkenberg,2005,historisk,Invandring,231
+Falkenberg,2005,historisk,Utvandring,135
+Falkenberg,2005,historisk,Utrikes flyttnetto,96
+Falkenberg,2006,historisk,Invandring,434
+Falkenberg,2006,historisk,Utvandring,169
+Falkenberg,2006,historisk,Utrikes flyttnetto,265
+Falkenberg,2007,historisk,Invandring,344
+Falkenberg,2007,historisk,Utvandring,102
+Falkenberg,2007,historisk,Utrikes flyttnetto,242
+Falkenberg,2008,historisk,Invandring,371
+Falkenberg,2008,historisk,Utvandring,129
+Falkenberg,2008,historisk,Utrikes flyttnetto,242
+Falkenberg,2009,historisk,Invandring,318
+Falkenberg,2009,historisk,Utvandring,144
+Falkenberg,2009,historisk,Utrikes flyttnetto,174
+Falkenberg,2010,historisk,Invandring,266
+Falkenberg,2010,historisk,Utvandring,159
+Falkenberg,2010,historisk,Utrikes flyttnetto,107
+Falkenberg,2011,historisk,Invandring,255
+Falkenberg,2011,historisk,Utvandring,128
+Falkenberg,2011,historisk,Utrikes flyttnetto,127
+Falkenberg,2012,historisk,Invandring,221
+Falkenberg,2012,historisk,Utvandring,145
+Falkenberg,2012,historisk,Utrikes flyttnetto,76
+Falkenberg,2013,historisk,Invandring,493
+Falkenberg,2013,historisk,Utvandring,152
+Falkenberg,2013,historisk,Utrikes flyttnetto,341
+Falkenberg,2014,historisk,Invandring,528
+Falkenberg,2014,historisk,Utvandring,167
+Falkenberg,2014,historisk,Utrikes flyttnetto,361
+Falkenberg,2015,historisk,Invandring,578
+Falkenberg,2015,historisk,Utvandring,113
+Falkenberg,2015,historisk,Utrikes flyttnetto,465
+Falkenberg,2016,historisk,Invandring,1086
+Falkenberg,2016,historisk,Utvandring,108
+Falkenberg,2016,historisk,Utrikes flyttnetto,978
+Falkenberg,2017,historisk,Invandring,497
+Falkenberg,2017,historisk,Utvandring,106
+Falkenberg,2017,historisk,Utrikes flyttnetto,391
+Falkenberg,2018,historisk,Invandring,401
+Falkenberg,2018,historisk,Utvandring,122
+Falkenberg,2018,historisk,Utrikes flyttnetto,279
+Falkenberg,2019,historisk,Invandring,356
+Falkenberg,2019,historisk,Utvandring,121
+Falkenberg,2019,historisk,Utrikes flyttnetto,235
+Falkenberg,2020,historisk,Invandring,309
+Falkenberg,2020,historisk,Utvandring,117
+Falkenberg,2020,historisk,Utrikes flyttnetto,192
+Falkenberg,2021,historisk,Invandring,275
+Falkenberg,2021,historisk,Utvandring,145
+Falkenberg,2021,historisk,Utrikes flyttnetto,130
+Falkenberg,2022,historisk,Invandring,221
+Falkenberg,2022,historisk,Utvandring,156
+Falkenberg,2022,historisk,Utrikes flyttnetto,65
+Falkenberg,2023,historisk,Invandring,263
+Falkenberg,2023,historisk,Utvandring,231
+Falkenberg,2023,historisk,Utrikes flyttnetto,32
+Falkenberg,2024,historisk,Invandring,334
+Falkenberg,2024,historisk,Utvandring,256
+Falkenberg,2024,historisk,Utrikes flyttnetto,78
+Falkenberg,2025,historisk,Invandring,195
+Falkenberg,2025,historisk,Utvandring,236
+Falkenberg,2025,historisk,Utrikes flyttnetto,-41
+Falkenberg,2026,prognos,Invandring,235.12377881234676
+Falkenberg,2026,prognos,Utvandring,189.85265810159552
+Falkenberg,2026,prognos,Utrikes flyttnetto,45.271120710751234
+Falkenberg,2027,prognos,Invandring,220.58607138146016
+Falkenberg,2027,prognos,Utvandring,189.32588553748576
+Falkenberg,2027,prognos,Utrikes flyttnetto,31.260185843974398
+Falkenberg,2028,prognos,Invandring,199.33830381954596
+Falkenberg,2028,prognos,Utvandring,188.7150107156342
+Falkenberg,2028,prognos,Utrikes flyttnetto,10.623293103911749
+Falkenberg,2029,prognos,Invandring,204.18804339317597
+Falkenberg,2029,prognos,Utvandring,187.92172729327615
+Falkenberg,2029,prognos,Utrikes flyttnetto,16.266316099899825
+Falkenberg,2030,prognos,Invandring,243.06964523836118
+Falkenberg,2030,prognos,Utvandring,187.15454487343976
+Falkenberg,2030,prognos,Utrikes flyttnetto,55.915100364921415
+Falkenberg,2031,prognos,Invandring,245.1422146771883
+Falkenberg,2031,prognos,Utvandring,186.69959484127236
+Falkenberg,2031,prognos,Utrikes flyttnetto,58.442619835915934
+Falkenberg,2032,prognos,Invandring,247.1489874729021
+Falkenberg,2032,prognos,Utvandring,186.32820855904274
+Falkenberg,2032,prognos,Utrikes flyttnetto,60.82077891385936
+Falkenberg,2033,prognos,Invandring,249.24472574990838
+Falkenberg,2033,prognos,Utvandring,186.06709465104683
+Falkenberg,2033,prognos,Utrikes flyttnetto,63.17763109886155
+Falkenberg,2034,prognos,Invandring,251.54134918190914
+Falkenberg,2034,prognos,Utvandring,185.8873199765859
+Falkenberg,2034,prognos,Utrikes flyttnetto,65.65402920532324
+Falkenberg,2035,prognos,Invandring,253.98788801320308
+Falkenberg,2035,prognos,Utvandring,185.7790757938946
+Falkenberg,2035,prognos,Utrikes flyttnetto,68.20881221930847
+Falkenberg,2036,prognos,Invandring,256.5784589470609
+Falkenberg,2036,prognos,Utvandring,185.75031385731225
+Falkenberg,2036,prognos,Utrikes flyttnetto,70.82814508974863
+Falkenberg,2037,prognos,Invandring,259.32412247072426
+Falkenberg,2037,prognos,Utvandring,185.81658585945328
+Falkenberg,2037,prognos,Utrikes flyttnetto,73.50753661127098
+Falkenberg,2038,prognos,Invandring,262.31760486528185
+Falkenberg,2038,prognos,Utvandring,186.0006777256017
+Falkenberg,2038,prognos,Utrikes flyttnetto,76.31692713968016
+Falkenberg,2039,prognos,Invandring,265.5808773761702
+Falkenberg,2039,prognos,Utvandring,186.30131432685326
+Falkenberg,2039,prognos,Utrikes flyttnetto,79.27956304931692
+Falkenberg,2040,prognos,Invandring,268.7514849088693
+Falkenberg,2040,prognos,Utvandring,186.68967528554896
+Falkenberg,2040,prognos,Utrikes flyttnetto,82.06180962332036
+Hallands län,2000,historisk,Invandring,1321
+Hallands län,2000,historisk,Utvandring,954
+Hallands län,2000,historisk,Utrikes flyttnetto,367
+Hallands län,2001,historisk,Invandring,1443
+Hallands län,2001,historisk,Utvandring,800
+Hallands län,2001,historisk,Utrikes flyttnetto,643
+Hallands län,2002,historisk,Invandring,1350
+Hallands län,2002,historisk,Utvandring,796
+Hallands län,2002,historisk,Utrikes flyttnetto,554
+Hallands län,2003,historisk,Invandring,1510
+Hallands län,2003,historisk,Utvandring,830
+Hallands län,2003,historisk,Utrikes flyttnetto,680
+Hallands län,2004,historisk,Invandring,1443
+Hallands län,2004,historisk,Utvandring,807
+Hallands län,2004,historisk,Utrikes flyttnetto,636
+Hallands län,2005,historisk,Invandring,1446
+Hallands län,2005,historisk,Utvandring,927
+Hallands län,2005,historisk,Utrikes flyttnetto,519
+Hallands län,2006,historisk,Invandring,2014
+Hallands län,2006,historisk,Utvandring,1073
+Hallands län,2006,historisk,Utrikes flyttnetto,941
+Hallands län,2007,historisk,Invandring,1895
+Hallands län,2007,historisk,Utvandring,878
+Hallands län,2007,historisk,Utrikes flyttnetto,1017
+Hallands län,2008,historisk,Invandring,2019
+Hallands län,2008,historisk,Utvandring,1106
+Hallands län,2008,historisk,Utrikes flyttnetto,913
+Hallands län,2009,historisk,Invandring,2221
+Hallands län,2009,historisk,Utvandring,944
+Hallands län,2009,historisk,Utrikes flyttnetto,1277
+Hallands län,2010,historisk,Invandring,1946
+Hallands län,2010,historisk,Utvandring,1167
+Hallands län,2010,historisk,Utrikes flyttnetto,779
+Hallands län,2011,historisk,Invandring,1977
+Hallands län,2011,historisk,Utvandring,1317
+Hallands län,2011,historisk,Utrikes flyttnetto,660
+Hallands län,2012,historisk,Invandring,1838
+Hallands län,2012,historisk,Utvandring,1052
+Hallands län,2012,historisk,Utrikes flyttnetto,786
+Hallands län,2013,historisk,Invandring,2478
+Hallands län,2013,historisk,Utvandring,1151
+Hallands län,2013,historisk,Utrikes flyttnetto,1327
+Hallands län,2014,historisk,Invandring,3444
+Hallands län,2014,historisk,Utvandring,1076
+Hallands län,2014,historisk,Utrikes flyttnetto,2368
+Hallands län,2015,historisk,Invandring,3575
+Hallands län,2015,historisk,Utvandring,964
+Hallands län,2015,historisk,Utrikes flyttnetto,2611
+Hallands län,2016,historisk,Invandring,4769
+Hallands län,2016,historisk,Utvandring,1012
+Hallands län,2016,historisk,Utrikes flyttnetto,3757
+Hallands län,2017,historisk,Invandring,3277
+Hallands län,2017,historisk,Utvandring,833
+Hallands län,2017,historisk,Utrikes flyttnetto,2444
+Hallands län,2018,historisk,Invandring,3145
+Hallands län,2018,historisk,Utvandring,984
+Hallands län,2018,historisk,Utrikes flyttnetto,2161
+Hallands län,2019,historisk,Invandring,2744
+Hallands län,2019,historisk,Utvandring,928
+Hallands län,2019,historisk,Utrikes flyttnetto,1816
+Hallands län,2020,historisk,Invandring,2094
+Hallands län,2020,historisk,Utvandring,938
+Hallands län,2020,historisk,Utrikes flyttnetto,1156
+Hallands län,2021,historisk,Invandring,2291
+Hallands län,2021,historisk,Utvandring,945
+Hallands län,2021,historisk,Utrikes flyttnetto,1346
+Hallands län,2022,historisk,Invandring,2303
+Hallands län,2022,historisk,Utvandring,1105
+Hallands län,2022,historisk,Utrikes flyttnetto,1198
+Hallands län,2023,historisk,Invandring,2125
+Hallands län,2023,historisk,Utvandring,1669
+Hallands län,2023,historisk,Utrikes flyttnetto,456
+Hallands län,2024,historisk,Invandring,2465
+Hallands län,2024,historisk,Utvandring,1856
+Hallands län,2024,historisk,Utrikes flyttnetto,609
+Hallands län,2025,historisk,Invandring,1859
+Hallands län,2025,historisk,Utvandring,1551
+Hallands län,2025,historisk,Utrikes flyttnetto,308
+Hallands län,2026,prognos,Invandring,1930.6479765526929
+Hallands län,2026,prognos,Utvandring,1350.8849120881964
+Hallands län,2026,prognos,Utrikes flyttnetto,579.7630644644964
+Hallands län,2027,prognos,Invandring,1811.3956514180522
+Hallands län,2027,prognos,Utvandring,1348.558892080187
+Hallands län,2027,prognos,Utrikes flyttnetto,462.83675933786526
+Hallands län,2028,prognos,Invandring,1636.015038948714
+Hallands län,2028,prognos,Utvandring,1345.1520057722657
+Hallands län,2028,prognos,Utrikes flyttnetto,290.8630331764482
+Hallands län,2029,prognos,Invandring,1675.5849861798893
+Hallands län,2029,prognos,Utvandring,1340.204174742058
+Hallands län,2029,prognos,Utrikes flyttnetto,335.3808114378312
+Hallands län,2030,prognos,Invandring,1992.5669031816283
+Hallands län,2030,prognos,Utvandring,1335.4670807852908
+Hallands län,2030,prognos,Utrikes flyttnetto,657.0998223963375
+Hallands län,2031,prognos,Invandring,2009.3911046065618
+Hallands län,2031,prognos,Utvandring,1333.17167793097
+Hallands län,2031,prognos,Utrikes flyttnetto,676.2194266755919
+Hallands län,2032,prognos,Invandring,2025.5374938008406
+Hallands län,2032,prognos,Utvandring,1331.3942730296392
+Hallands län,2032,prognos,Utrikes flyttnetto,694.1432207712014
+Hallands län,2033,prognos,Invandring,2042.5315715701154
+Hallands län,2033,prognos,Utvandring,1330.294989111616
+Hallands län,2033,prognos,Utrikes flyttnetto,712.2365824584995
+Hallands län,2034,prognos,Invandring,2061.0277303492962
+Hallands län,2034,prognos,Utvandring,1329.8024957908247
+Hallands län,2034,prognos,Utrikes flyttnetto,731.2252345584716
+Hallands län,2035,prognos,Invandring,2080.8655320957696
+Hallands län,2035,prognos,Utvandring,1329.8895199648846
+Hallands län,2035,prognos,Utrikes flyttnetto,750.976012130885
+Hallands län,2036,prognos,Invandring,2101.840512202123
+Hallands län,2036,prognos,Utvandring,1330.5808583794549
+Hallands län,2036,prognos,Utrikes flyttnetto,771.2596538226683
+Hallands län,2037,prognos,Invandring,2123.9940999358714
+Hallands län,2037,prognos,Utvandring,1331.9172531532145
+Hallands län,2037,prognos,Utrikes flyttnetto,792.076846782657
+Hallands län,2038,prognos,Invandring,2148.2161427271712
+Hallands län,2038,prognos,Utvandring,1333.8859081098867
+Hallands län,2038,prognos,Utrikes flyttnetto,814.3302346172845
+Hallands län,2039,prognos,Invandring,2174.6109292152987
+Hallands län,2039,prognos,Utvandring,1336.3957004623612
+Hallands län,2039,prognos,Utrikes flyttnetto,838.2152287529375
+Hallands län,2040,prognos,Invandring,2200.298654985146
+Hallands län,2040,prognos,Utvandring,1339.2970503537256
+Hallands län,2040,prognos,Utrikes flyttnetto,861.0016046314206
+Halmstad,2000,historisk,Invandring,410
+Halmstad,2000,historisk,Utvandring,312
+Halmstad,2000,historisk,Utrikes flyttnetto,98
+Halmstad,2001,historisk,Invandring,431
+Halmstad,2001,historisk,Utvandring,268
+Halmstad,2001,historisk,Utrikes flyttnetto,163
+Halmstad,2002,historisk,Invandring,473
+Halmstad,2002,historisk,Utvandring,266
+Halmstad,2002,historisk,Utrikes flyttnetto,207
+Halmstad,2003,historisk,Invandring,591
+Halmstad,2003,historisk,Utvandring,266
+Halmstad,2003,historisk,Utrikes flyttnetto,325
+Halmstad,2004,historisk,Invandring,503
+Halmstad,2004,historisk,Utvandring,282
+Halmstad,2004,historisk,Utrikes flyttnetto,221
+Halmstad,2005,historisk,Invandring,483
+Halmstad,2005,historisk,Utvandring,333
+Halmstad,2005,historisk,Utrikes flyttnetto,150
+Halmstad,2006,historisk,Invandring,737
+Halmstad,2006,historisk,Utvandring,419
+Halmstad,2006,historisk,Utrikes flyttnetto,318
+Halmstad,2007,historisk,Invandring,672
+Halmstad,2007,historisk,Utvandring,269
+Halmstad,2007,historisk,Utrikes flyttnetto,403
+Halmstad,2008,historisk,Invandring,766
+Halmstad,2008,historisk,Utvandring,441
+Halmstad,2008,historisk,Utrikes flyttnetto,325
+Halmstad,2009,historisk,Invandring,886
+Halmstad,2009,historisk,Utvandring,371
+Halmstad,2009,historisk,Utrikes flyttnetto,515
+Halmstad,2010,historisk,Invandring,731
+Halmstad,2010,historisk,Utvandring,432
+Halmstad,2010,historisk,Utrikes flyttnetto,299
+Halmstad,2011,historisk,Invandring,762
+Halmstad,2011,historisk,Utvandring,563
+Halmstad,2011,historisk,Utrikes flyttnetto,199
+Halmstad,2012,historisk,Invandring,723
+Halmstad,2012,historisk,Utvandring,383
+Halmstad,2012,historisk,Utrikes flyttnetto,340
+Halmstad,2013,historisk,Invandring,807
+Halmstad,2013,historisk,Utvandring,403
+Halmstad,2013,historisk,Utrikes flyttnetto,404
+Halmstad,2014,historisk,Invandring,1339
+Halmstad,2014,historisk,Utvandring,384
+Halmstad,2014,historisk,Utrikes flyttnetto,955
+Halmstad,2015,historisk,Invandring,1258
+Halmstad,2015,historisk,Utvandring,350
+Halmstad,2015,historisk,Utrikes flyttnetto,908
+Halmstad,2016,historisk,Invandring,1638
+Halmstad,2016,historisk,Utvandring,419
+Halmstad,2016,historisk,Utrikes flyttnetto,1219
+Halmstad,2017,historisk,Invandring,1287
+Halmstad,2017,historisk,Utvandring,290
+Halmstad,2017,historisk,Utrikes flyttnetto,997
+Halmstad,2018,historisk,Invandring,1289
+Halmstad,2018,historisk,Utvandring,370
+Halmstad,2018,historisk,Utrikes flyttnetto,919
+Halmstad,2019,historisk,Invandring,1111
+Halmstad,2019,historisk,Utvandring,331
+Halmstad,2019,historisk,Utrikes flyttnetto,780
+Halmstad,2020,historisk,Invandring,802
+Halmstad,2020,historisk,Utvandring,343
+Halmstad,2020,historisk,Utrikes flyttnetto,459
+Halmstad,2021,historisk,Invandring,883
+Halmstad,2021,historisk,Utvandring,287
+Halmstad,2021,historisk,Utrikes flyttnetto,596
+Halmstad,2022,historisk,Invandring,983
+Halmstad,2022,historisk,Utvandring,399
+Halmstad,2022,historisk,Utrikes flyttnetto,584
+Halmstad,2023,historisk,Invandring,983
+Halmstad,2023,historisk,Utvandring,659
+Halmstad,2023,historisk,Utrikes flyttnetto,324
+Halmstad,2024,historisk,Invandring,959
+Halmstad,2024,historisk,Utvandring,790
+Halmstad,2024,historisk,Utrikes flyttnetto,169
+Halmstad,2025,historisk,Invandring,767
+Halmstad,2025,historisk,Utvandring,596
+Halmstad,2025,historisk,Utrikes flyttnetto,171
+Halmstad,2026,prognos,Invandring,796.9133422166474
+Halmstad,2026,prognos,Utvandring,521.6470668179657
+Halmstad,2026,prognos,Utrikes flyttnetto,275.2662753986817
+Halmstad,2027,prognos,Invandring,749.1136061847285
+Halmstad,2027,prognos,Utvandring,521.0249153271367
+Halmstad,2027,prognos,Utrikes flyttnetto,228.08869085759181
+Halmstad,2028,prognos,Invandring,675.4500312610315
+Halmstad,2028,prognos,Utvandring,519.9387289143099
+Halmstad,2028,prognos,Utrikes flyttnetto,155.51130234672166
+Halmstad,2029,prognos,Invandring,692.5147589564169
+Halmstad,2029,prognos,Utvandring,518.2169725513329
+Halmstad,2029,prognos,Utrikes flyttnetto,174.29778640508403
+Halmstad,2030,prognos,Invandring,825.4045836309303
+Halmstad,2030,prognos,Utvandring,516.7181497553818
+Halmstad,2030,prognos,Utrikes flyttnetto,308.6864338755486
+Halmstad,2031,prognos,Invandring,832.268922769267
+Halmstad,2031,prognos,Utvandring,516.5110905503977
+Halmstad,2031,prognos,Utrikes flyttnetto,315.7578322188692
+Halmstad,2032,prognos,Invandring,838.8549251368481
+Halmstad,2032,prognos,Utvandring,516.6086267062426
+Halmstad,2032,prognos,Utrikes flyttnetto,322.2462984306055
+Halmstad,2033,prognos,Invandring,845.8811619849889
+Halmstad,2033,prognos,Utvandring,517.0578934236748
+Halmstad,2033,prognos,Utrikes flyttnetto,328.8232685613141
+Halmstad,2034,prognos,Invandring,853.4879935419285
+Halmstad,2034,prognos,Utvandring,517.7898714991383
+Halmstad,2034,prognos,Utrikes flyttnetto,335.69812204279026
+Halmstad,2035,prognos,Invandring,861.5885214998882
+Halmstad,2035,prognos,Utvandring,518.7216104263188
+Halmstad,2035,prognos,Utrikes flyttnetto,342.86691107356944
+Halmstad,2036,prognos,Invandring,870.2659553534739
+Halmstad,2036,prognos,Utvandring,519.8089994391598
+Halmstad,2036,prognos,Utrikes flyttnetto,350.4569559143141
+Halmstad,2037,prognos,Invandring,879.417791836988
+Halmstad,2037,prognos,Utvandring,521.0423000962832
+Halmstad,2037,prognos,Utrikes flyttnetto,358.3754917407049
+Halmstad,2038,prognos,Invandring,889.3920060358158
+Halmstad,2038,prognos,Utvandring,522.3970315837621
+Halmstad,2038,prognos,Utrikes flyttnetto,366.9949744520537
+Halmstad,2039,prognos,Invandring,900.2208018892843
+Halmstad,2039,prognos,Utvandring,523.8363051444089
+Halmstad,2039,prognos,Utrikes flyttnetto,376.3844967448754
+Halmstad,2040,prognos,Invandring,910.8456444300693
+Halmstad,2040,prognos,Utvandring,525.295352907245
+Halmstad,2040,prognos,Utrikes flyttnetto,385.5502915228243
+Hylte,2000,historisk,Invandring,68
+Hylte,2000,historisk,Utvandring,17
+Hylte,2000,historisk,Utrikes flyttnetto,51
+Hylte,2001,historisk,Invandring,145
+Hylte,2001,historisk,Utvandring,13
+Hylte,2001,historisk,Utrikes flyttnetto,132
+Hylte,2002,historisk,Invandring,63
+Hylte,2002,historisk,Utvandring,20
+Hylte,2002,historisk,Utrikes flyttnetto,43
+Hylte,2003,historisk,Invandring,80
+Hylte,2003,historisk,Utvandring,21
+Hylte,2003,historisk,Utrikes flyttnetto,59
+Hylte,2004,historisk,Invandring,107
+Hylte,2004,historisk,Utvandring,22
+Hylte,2004,historisk,Utrikes flyttnetto,85
+Hylte,2005,historisk,Invandring,80
+Hylte,2005,historisk,Utvandring,27
+Hylte,2005,historisk,Utrikes flyttnetto,53
+Hylte,2006,historisk,Invandring,170
+Hylte,2006,historisk,Utvandring,32
+Hylte,2006,historisk,Utrikes flyttnetto,138
+Hylte,2007,historisk,Invandring,134
+Hylte,2007,historisk,Utvandring,26
+Hylte,2007,historisk,Utrikes flyttnetto,108
+Hylte,2008,historisk,Invandring,129
+Hylte,2008,historisk,Utvandring,29
+Hylte,2008,historisk,Utrikes flyttnetto,100
+Hylte,2009,historisk,Invandring,141
+Hylte,2009,historisk,Utvandring,29
+Hylte,2009,historisk,Utrikes flyttnetto,112
+Hylte,2010,historisk,Invandring,97
+Hylte,2010,historisk,Utvandring,45
+Hylte,2010,historisk,Utrikes flyttnetto,52
+Hylte,2011,historisk,Invandring,111
+Hylte,2011,historisk,Utvandring,36
+Hylte,2011,historisk,Utrikes flyttnetto,75
+Hylte,2012,historisk,Invandring,104
+Hylte,2012,historisk,Utvandring,32
+Hylte,2012,historisk,Utrikes flyttnetto,72
+Hylte,2013,historisk,Invandring,196
+Hylte,2013,historisk,Utvandring,55
+Hylte,2013,historisk,Utrikes flyttnetto,141
+Hylte,2014,historisk,Invandring,318
+Hylte,2014,historisk,Utvandring,25
+Hylte,2014,historisk,Utrikes flyttnetto,293
+Hylte,2015,historisk,Invandring,470
+Hylte,2015,historisk,Utvandring,23
+Hylte,2015,historisk,Utrikes flyttnetto,447
+Hylte,2016,historisk,Invandring,622
+Hylte,2016,historisk,Utvandring,44
+Hylte,2016,historisk,Utrikes flyttnetto,578
+Hylte,2017,historisk,Invandring,278
+Hylte,2017,historisk,Utvandring,22
+Hylte,2017,historisk,Utrikes flyttnetto,256
+Hylte,2018,historisk,Invandring,214
+Hylte,2018,historisk,Utvandring,36
+Hylte,2018,historisk,Utrikes flyttnetto,178
+Hylte,2019,historisk,Invandring,101
+Hylte,2019,historisk,Utvandring,40
+Hylte,2019,historisk,Utrikes flyttnetto,61
+Hylte,2020,historisk,Invandring,83
+Hylte,2020,historisk,Utvandring,46
+Hylte,2020,historisk,Utrikes flyttnetto,37
+Hylte,2021,historisk,Invandring,94
+Hylte,2021,historisk,Utvandring,25
+Hylte,2021,historisk,Utrikes flyttnetto,69
+Hylte,2022,historisk,Invandring,106
+Hylte,2022,historisk,Utvandring,48
+Hylte,2022,historisk,Utrikes flyttnetto,58
+Hylte,2023,historisk,Invandring,90
+Hylte,2023,historisk,Utvandring,85
+Hylte,2023,historisk,Utrikes flyttnetto,5
+Hylte,2024,historisk,Invandring,92
+Hylte,2024,historisk,Utvandring,91
+Hylte,2024,historisk,Utrikes flyttnetto,1
+Hylte,2025,historisk,Invandring,104
+Hylte,2025,historisk,Utvandring,72
+Hylte,2025,historisk,Utrikes flyttnetto,32
+Hylte,2026,prognos,Invandring,88.87758892834894
+Hylte,2026,prognos,Utvandring,57.993097847027244
+Hylte,2026,prognos,Utrikes flyttnetto,30.8844910813217
+Hylte,2027,prognos,Invandring,83.24359152102939
+Hylte,2027,prognos,Utvandring,56.98944292743432
+Hylte,2027,prognos,Utrikes flyttnetto,26.25414859359507
+Hylte,2028,prognos,Invandring,75.28423756300907
+Hylte,2028,prognos,Utvandring,56.00158959023321
+Hylte,2028,prognos,Utrikes flyttnetto,19.282647972775862
+Hylte,2029,prognos,Invandring,76.99002118774179
+Hylte,2029,prognos,Utvandring,55.01509138997761
+Hylte,2029,prognos,Utrikes flyttnetto,21.974929797764176
+Hylte,2030,prognos,Invandring,91.20096020283584
+Hylte,2030,prognos,Utvandring,54.140919093386955
+Hylte,2030,prognos,Utrikes flyttnetto,37.06004110944889
+Hylte,2031,prognos,Invandring,91.97631989820425
+Hylte,2031,prognos,Utvandring,53.50846347242248
+Hylte,2031,prognos,Utrikes flyttnetto,38.467856425781775
+Hylte,2032,prognos,Invandring,92.72170984536189
+Hylte,2032,prognos,Utvandring,52.98015950323379
+Hylte,2032,prognos,Utrikes flyttnetto,39.74155034212809
+Hylte,2033,prognos,Invandring,93.48761809745606
+Hylte,2033,prognos,Utvandring,52.53001934054436
+Hylte,2033,prognos,Utrikes flyttnetto,40.95759875691171
+Hylte,2034,prognos,Invandring,94.32747410531394
+Hylte,2034,prognos,Utvandring,52.14269513958075
+Hylte,2034,prognos,Utrikes flyttnetto,42.18477896573319
+Hylte,2035,prognos,Invandring,95.24716863920173
+Hylte,2035,prognos,Utvandring,51.81501645725319
+Hylte,2035,prognos,Utrikes flyttnetto,43.43215218194854
+Hylte,2036,prognos,Invandring,96.19239878133743
+Hylte,2036,prognos,Utvandring,51.54933298356843
+Hylte,2036,prognos,Utrikes flyttnetto,44.643065797769
+Hylte,2037,prognos,Invandring,97.18822480317765
+Hylte,2037,prognos,Utvandring,51.34609018748867
+Hylte,2037,prognos,Utrikes flyttnetto,45.84213461568898
+Hylte,2038,prognos,Invandring,98.28995455327347
+Hylte,2038,prognos,Utvandring,51.194493054828705
+Hylte,2038,prognos,Utrikes flyttnetto,47.09546149844477
+Hylte,2039,prognos,Invandring,99.49186412251814
+Hylte,2039,prognos,Utvandring,51.08078926240423
+Hylte,2039,prognos,Utrikes flyttnetto,48.41107486011391
+Hylte,2040,prognos,Invandring,100.65022279995412
+Hylte,2040,prognos,Utvandring,50.99499418152425
+Hylte,2040,prognos,Utrikes flyttnetto,49.655228618429874
+Kungsbacka,2000,historisk,Invandring,281
+Kungsbacka,2000,historisk,Utvandring,283
+Kungsbacka,2000,historisk,Utrikes flyttnetto,-2
+Kungsbacka,2001,historisk,Invandring,315
+Kungsbacka,2001,historisk,Utvandring,229
+Kungsbacka,2001,historisk,Utrikes flyttnetto,86
+Kungsbacka,2002,historisk,Invandring,318
+Kungsbacka,2002,historisk,Utvandring,218
+Kungsbacka,2002,historisk,Utrikes flyttnetto,100
+Kungsbacka,2003,historisk,Invandring,346
+Kungsbacka,2003,historisk,Utvandring,238
+Kungsbacka,2003,historisk,Utrikes flyttnetto,108
+Kungsbacka,2004,historisk,Invandring,303
+Kungsbacka,2004,historisk,Utvandring,234
+Kungsbacka,2004,historisk,Utrikes flyttnetto,69
+Kungsbacka,2005,historisk,Invandring,339
+Kungsbacka,2005,historisk,Utvandring,266
+Kungsbacka,2005,historisk,Utrikes flyttnetto,73
+Kungsbacka,2006,historisk,Invandring,331
+Kungsbacka,2006,historisk,Utvandring,242
+Kungsbacka,2006,historisk,Utrikes flyttnetto,89
+Kungsbacka,2007,historisk,Invandring,305
+Kungsbacka,2007,historisk,Utvandring,274
+Kungsbacka,2007,historisk,Utrikes flyttnetto,31
+Kungsbacka,2008,historisk,Invandring,346
+Kungsbacka,2008,historisk,Utvandring,272
+Kungsbacka,2008,historisk,Utrikes flyttnetto,74
+Kungsbacka,2009,historisk,Invandring,387
+Kungsbacka,2009,historisk,Utvandring,184
+Kungsbacka,2009,historisk,Utrikes flyttnetto,203
+Kungsbacka,2010,historisk,Invandring,390
+Kungsbacka,2010,historisk,Utvandring,275
+Kungsbacka,2010,historisk,Utrikes flyttnetto,115
+Kungsbacka,2011,historisk,Invandring,405
+Kungsbacka,2011,historisk,Utvandring,315
+Kungsbacka,2011,historisk,Utrikes flyttnetto,90
+Kungsbacka,2012,historisk,Invandring,375
+Kungsbacka,2012,historisk,Utvandring,272
+Kungsbacka,2012,historisk,Utrikes flyttnetto,103
+Kungsbacka,2013,historisk,Invandring,420
+Kungsbacka,2013,historisk,Utvandring,307
+Kungsbacka,2013,historisk,Utrikes flyttnetto,113
+Kungsbacka,2014,historisk,Invandring,462
+Kungsbacka,2014,historisk,Utvandring,276
+Kungsbacka,2014,historisk,Utrikes flyttnetto,186
+Kungsbacka,2015,historisk,Invandring,405
+Kungsbacka,2015,historisk,Utvandring,255
+Kungsbacka,2015,historisk,Utrikes flyttnetto,150
+Kungsbacka,2016,historisk,Invandring,432
+Kungsbacka,2016,historisk,Utvandring,223
+Kungsbacka,2016,historisk,Utrikes flyttnetto,209
+Kungsbacka,2017,historisk,Invandring,490
+Kungsbacka,2017,historisk,Utvandring,232
+Kungsbacka,2017,historisk,Utrikes flyttnetto,258
+Kungsbacka,2018,historisk,Invandring,615
+Kungsbacka,2018,historisk,Utvandring,239
+Kungsbacka,2018,historisk,Utrikes flyttnetto,376
+Kungsbacka,2019,historisk,Invandring,556
+Kungsbacka,2019,historisk,Utvandring,237
+Kungsbacka,2019,historisk,Utrikes flyttnetto,319
+Kungsbacka,2020,historisk,Invandring,473
+Kungsbacka,2020,historisk,Utvandring,229
+Kungsbacka,2020,historisk,Utrikes flyttnetto,244
+Kungsbacka,2021,historisk,Invandring,447
+Kungsbacka,2021,historisk,Utvandring,269
+Kungsbacka,2021,historisk,Utrikes flyttnetto,178
+Kungsbacka,2022,historisk,Invandring,451
+Kungsbacka,2022,historisk,Utvandring,196
+Kungsbacka,2022,historisk,Utrikes flyttnetto,255
+Kungsbacka,2023,historisk,Invandring,316
+Kungsbacka,2023,historisk,Utvandring,307
+Kungsbacka,2023,historisk,Utrikes flyttnetto,9
+Kungsbacka,2024,historisk,Invandring,510
+Kungsbacka,2024,historisk,Utvandring,326
+Kungsbacka,2024,historisk,Utrikes flyttnetto,184
+Kungsbacka,2025,historisk,Invandring,371
+Kungsbacka,2025,historisk,Utvandring,281
+Kungsbacka,2025,historisk,Utrikes flyttnetto,90
+Kungsbacka,2026,prognos,Invandring,370.91411750231714
+Kungsbacka,2026,prognos,Utvandring,266.58089749319015
+Kungsbacka,2026,prognos,Utrikes flyttnetto,104.33322000912699
+Kungsbacka,2027,prognos,Invandring,347.305392621605
+Kungsbacka,2027,prognos,Utvandring,265.98823066105734
+Kungsbacka,2027,prognos,Utrikes flyttnetto,81.31716196054765
+Kungsbacka,2028,prognos,Invandring,314.229958305751
+Kungsbacka,2028,prognos,Utvandring,265.1752426986144
+Kungsbacka,2028,prognos,Utrikes flyttnetto,49.054715607136586
+Kungsbacka,2029,prognos,Invandring,321.54670053977975
+Kungsbacka,2029,prognos,Utvandring,264.02220399313404
+Kungsbacka,2029,prognos,Utrikes flyttnetto,57.52449654664571
+Kungsbacka,2030,prognos,Invandring,381.7788187478375
+Kungsbacka,2030,prognos,Utvandring,262.74928423603285
+Kungsbacka,2030,prognos,Utrikes flyttnetto,119.02953451180463
+Kungsbacka,2031,prognos,Invandring,385.08410489315054
+Kungsbacka,2031,prognos,Utvandring,261.67762946737736
+Kungsbacka,2031,prognos,Utrikes flyttnetto,123.40647542577318
+Kungsbacka,2032,prognos,Invandring,388.2406624057842
+Kungsbacka,2032,prognos,Utvandring,260.5656831860001
+Kungsbacka,2032,prognos,Utrikes flyttnetto,127.67497921978406
+Kungsbacka,2033,prognos,Invandring,391.5227166661389
+Kungsbacka,2033,prognos,Utvandring,259.48993932936787
+Kungsbacka,2033,prognos,Utrikes flyttnetto,132.032777336771
+Kungsbacka,2034,prognos,Invandring,395.131121142903
+Kungsbacka,2034,prognos,Utvandring,258.51373512306486
+Kungsbacka,2034,prognos,Utrikes flyttnetto,136.61738601983814
+Kungsbacka,2035,prognos,Invandring,398.9938811348929
+Kungsbacka,2035,prognos,Utvandring,257.69012166863445
+Kungsbacka,2035,prognos,Utrikes flyttnetto,141.30375946625844
+Kungsbacka,2036,prognos,Invandring,403.0536543291256
+Kungsbacka,2036,prognos,Utvandring,257.05416738542027
+Kungsbacka,2036,prognos,Utrikes flyttnetto,145.99948694370534
+Kungsbacka,2037,prognos,Invandring,407.35872957739093
+Kungsbacka,2037,prognos,Utvandring,256.61850463413964
+Kungsbacka,2037,prognos,Utrikes flyttnetto,150.7402249432513
+Kungsbacka,2038,prognos,Invandring,412.0561347129509
+Kungsbacka,2038,prognos,Utvandring,256.3837979887834
+Kungsbacka,2038,prognos,Utrikes flyttnetto,155.6723367241675
+Kungsbacka,2039,prognos,Invandring,417.2109753145937
+Kungsbacka,2039,prognos,Utvandring,256.332760243362
+Kungsbacka,2039,prognos,Utrikes flyttnetto,160.87821507123175
+Kungsbacka,2040,prognos,Invandring,422.1850958231229
+Kungsbacka,2040,prognos,Utvandring,256.43565996281257
+Kungsbacka,2040,prognos,Utrikes flyttnetto,165.7494358603103
+Laholm,2000,historisk,Invandring,81
+Laholm,2000,historisk,Utvandring,80
+Laholm,2000,historisk,Utrikes flyttnetto,1
+Laholm,2001,historisk,Invandring,81
+Laholm,2001,historisk,Utvandring,39
+Laholm,2001,historisk,Utrikes flyttnetto,42
+Laholm,2002,historisk,Invandring,88
+Laholm,2002,historisk,Utvandring,40
+Laholm,2002,historisk,Utrikes flyttnetto,48
+Laholm,2003,historisk,Invandring,114
+Laholm,2003,historisk,Utvandring,51
+Laholm,2003,historisk,Utrikes flyttnetto,63
+Laholm,2004,historisk,Invandring,88
+Laholm,2004,historisk,Utvandring,60
+Laholm,2004,historisk,Utrikes flyttnetto,28
+Laholm,2005,historisk,Invandring,119
+Laholm,2005,historisk,Utvandring,59
+Laholm,2005,historisk,Utrikes flyttnetto,60
+Laholm,2006,historisk,Invandring,120
+Laholm,2006,historisk,Utvandring,75
+Laholm,2006,historisk,Utrikes flyttnetto,45
+Laholm,2007,historisk,Invandring,166
+Laholm,2007,historisk,Utvandring,71
+Laholm,2007,historisk,Utrikes flyttnetto,95
+Laholm,2008,historisk,Invandring,141
+Laholm,2008,historisk,Utvandring,61
+Laholm,2008,historisk,Utrikes flyttnetto,80
+Laholm,2009,historisk,Invandring,129
+Laholm,2009,historisk,Utvandring,81
+Laholm,2009,historisk,Utrikes flyttnetto,48
+Laholm,2010,historisk,Invandring,126
+Laholm,2010,historisk,Utvandring,67
+Laholm,2010,historisk,Utrikes flyttnetto,59
+Laholm,2011,historisk,Invandring,125
+Laholm,2011,historisk,Utvandring,72
+Laholm,2011,historisk,Utrikes flyttnetto,53
+Laholm,2012,historisk,Invandring,118
+Laholm,2012,historisk,Utvandring,87
+Laholm,2012,historisk,Utrikes flyttnetto,31
+Laholm,2013,historisk,Invandring,128
+Laholm,2013,historisk,Utvandring,77
+Laholm,2013,historisk,Utrikes flyttnetto,51
+Laholm,2014,historisk,Invandring,251
+Laholm,2014,historisk,Utvandring,76
+Laholm,2014,historisk,Utrikes flyttnetto,175
+Laholm,2015,historisk,Invandring,332
+Laholm,2015,historisk,Utvandring,68
+Laholm,2015,historisk,Utrikes flyttnetto,264
+Laholm,2016,historisk,Invandring,340
+Laholm,2016,historisk,Utvandring,58
+Laholm,2016,historisk,Utrikes flyttnetto,282
+Laholm,2017,historisk,Invandring,298
+Laholm,2017,historisk,Utvandring,64
+Laholm,2017,historisk,Utrikes flyttnetto,234
+Laholm,2018,historisk,Invandring,186
+Laholm,2018,historisk,Utvandring,75
+Laholm,2018,historisk,Utrikes flyttnetto,111
+Laholm,2019,historisk,Invandring,180
+Laholm,2019,historisk,Utvandring,67
+Laholm,2019,historisk,Utrikes flyttnetto,113
+Laholm,2020,historisk,Invandring,117
+Laholm,2020,historisk,Utvandring,92
+Laholm,2020,historisk,Utrikes flyttnetto,25
+Laholm,2021,historisk,Invandring,185
+Laholm,2021,historisk,Utvandring,69
+Laholm,2021,historisk,Utrikes flyttnetto,116
+Laholm,2022,historisk,Invandring,184
+Laholm,2022,historisk,Utvandring,122
+Laholm,2022,historisk,Utrikes flyttnetto,62
+Laholm,2023,historisk,Invandring,142
+Laholm,2023,historisk,Utvandring,130
+Laholm,2023,historisk,Utrikes flyttnetto,12
+Laholm,2024,historisk,Invandring,144
+Laholm,2024,historisk,Utvandring,138
+Laholm,2024,historisk,Utrikes flyttnetto,6
+Laholm,2025,historisk,Invandring,146
+Laholm,2025,historisk,Utvandring,137
+Laholm,2025,historisk,Utrikes flyttnetto,9
+Laholm,2026,prognos,Invandring,134.74958807547037
+Laholm,2026,prognos,Utvandring,112.60031148438458
+Laholm,2026,prognos,Utrikes flyttnetto,22.149276591085794
+Laholm,2027,prognos,Invandring,126.29680820953138
+Laholm,2027,prognos,Utvandring,112.39139060367941
+Laholm,2027,prognos,Utrikes flyttnetto,13.905417605851966
+Laholm,2028,prognos,Invandring,114.31086309523454
+Laholm,2028,prognos,Utvandring,112.05725340989183
+Laholm,2028,prognos,Utrikes flyttnetto,2.2536096853427097
+Laholm,2029,prognos,Invandring,116.94801505323014
+Laholm,2029,prognos,Utvandring,111.58081054233149
+Laholm,2029,prognos,Utrikes flyttnetto,5.367204510898645
+Laholm,2030,prognos,Invandring,138.45493681110273
+Laholm,2030,prognos,Utvandring,111.10304711890637
+Laholm,2030,prognos,Utrikes flyttnetto,27.35188969219635
+Laholm,2031,prognos,Invandring,139.6275626741176
+Laholm,2031,prognos,Utvandring,110.79241157192806
+Laholm,2031,prognos,Utrikes flyttnetto,28.835151102189542
+Laholm,2032,prognos,Invandring,140.74999169310982
+Laholm,2032,prognos,Utvandring,110.52508529606234
+Laholm,2032,prognos,Utrikes flyttnetto,30.224906397047477
+Laholm,2033,prognos,Invandring,141.91487228912132
+Laholm,2033,prognos,Utvandring,110.31848263879384
+Laholm,2033,prognos,Utrikes flyttnetto,31.59638965032748
+Laholm,2034,prognos,Invandring,143.17479533141525
+Laholm,2034,prognos,Utvandring,110.1701106776431
+Laholm,2034,prognos,Utrikes flyttnetto,33.00468465377216
+Laholm,2035,prognos,Invandring,144.56113295338247
+Laholm,2035,prognos,Utvandring,110.08501902138067
+Laholm,2035,prognos,Utrikes flyttnetto,34.476113932001795
+Laholm,2036,prognos,Invandring,145.991081866731
+Laholm,2036,prognos,Utvandring,110.06980165754199
+Laholm,2036,prognos,Utrikes flyttnetto,35.92128020918902
+Laholm,2037,prognos,Invandring,147.49364467451272
+Laholm,2037,prognos,Utvandring,110.12281498555265
+Laholm,2037,prognos,Utrikes flyttnetto,37.37082968896007
+Laholm,2038,prognos,Invandring,149.15017373382
+Laholm,2038,prognos,Utvandring,110.23835874131197
+Laholm,2038,prognos,Utrikes flyttnetto,38.91181499250803
+Laholm,2039,prognos,Invandring,150.96607953625863
+Laholm,2039,prognos,Utvandring,110.40521536732945
+Laholm,2039,prognos,Utrikes flyttnetto,40.560864168929186
+Laholm,2040,prognos,Invandring,152.7219651529487
+Laholm,2040,prognos,Utvandring,110.61562612901491
+Laholm,2040,prognos,Utrikes flyttnetto,42.1063390239338
+Riket,2000,historisk,Invandring,58659
+Riket,2000,historisk,Utvandring,34091
+Riket,2000,historisk,Utrikes flyttnetto,24568
+Riket,2001,historisk,Invandring,60795
+Riket,2001,historisk,Utvandring,32141
+Riket,2001,historisk,Utrikes flyttnetto,28654
+Riket,2002,historisk,Invandring,64087
+Riket,2002,historisk,Utvandring,33009
+Riket,2002,historisk,Utrikes flyttnetto,31078
+Riket,2003,historisk,Invandring,63795
+Riket,2003,historisk,Utvandring,35023
+Riket,2003,historisk,Utrikes flyttnetto,28772
+Riket,2004,historisk,Invandring,62028
+Riket,2004,historisk,Utvandring,36586
+Riket,2004,historisk,Utrikes flyttnetto,25442
+Riket,2005,historisk,Invandring,65229
+Riket,2005,historisk,Utvandring,38118
+Riket,2005,historisk,Utrikes flyttnetto,27111
+Riket,2006,historisk,Invandring,95750
+Riket,2006,historisk,Utvandring,44908
+Riket,2006,historisk,Utrikes flyttnetto,50842
+Riket,2007,historisk,Invandring,99485
+Riket,2007,historisk,Utvandring,45418
+Riket,2007,historisk,Utrikes flyttnetto,54067
+Riket,2008,historisk,Invandring,101171
+Riket,2008,historisk,Utvandring,45294
+Riket,2008,historisk,Utrikes flyttnetto,55877
+Riket,2009,historisk,Invandring,102280
+Riket,2009,historisk,Utvandring,39240
+Riket,2009,historisk,Utrikes flyttnetto,63040
+Riket,2010,historisk,Invandring,98801
+Riket,2010,historisk,Utvandring,48853
+Riket,2010,historisk,Utrikes flyttnetto,49948
+Riket,2011,historisk,Invandring,96467
+Riket,2011,historisk,Utvandring,51179
+Riket,2011,historisk,Utrikes flyttnetto,45288
+Riket,2012,historisk,Invandring,103059
+Riket,2012,historisk,Utvandring,51747
+Riket,2012,historisk,Utrikes flyttnetto,51312
+Riket,2013,historisk,Invandring,115845
+Riket,2013,historisk,Utvandring,50715
+Riket,2013,historisk,Utrikes flyttnetto,65130
+Riket,2014,historisk,Invandring,126966
+Riket,2014,historisk,Utvandring,51237
+Riket,2014,historisk,Utrikes flyttnetto,75729
+Riket,2015,historisk,Invandring,134240
+Riket,2015,historisk,Utvandring,55830
+Riket,2015,historisk,Utrikes flyttnetto,78410
+Riket,2016,historisk,Invandring,163005
+Riket,2016,historisk,Utvandring,45878
+Riket,2016,historisk,Utrikes flyttnetto,117127
+Riket,2017,historisk,Invandring,144489
+Riket,2017,historisk,Utvandring,45620
+Riket,2017,historisk,Utrikes flyttnetto,98869
+Riket,2018,historisk,Invandring,132602
+Riket,2018,historisk,Utvandring,46981
+Riket,2018,historisk,Utrikes flyttnetto,85621
+Riket,2019,historisk,Invandring,115805
+Riket,2019,historisk,Utvandring,47718
+Riket,2019,historisk,Utrikes flyttnetto,68087
+Riket,2020,historisk,Invandring,82518
+Riket,2020,historisk,Utvandring,48937
+Riket,2020,historisk,Utrikes flyttnetto,33581
+Riket,2021,historisk,Invandring,90631
+Riket,2021,historisk,Utvandring,48284
+Riket,2021,historisk,Utrikes flyttnetto,42347
+Riket,2022,historisk,Invandring,102436
+Riket,2022,historisk,Utvandring,50592
+Riket,2022,historisk,Utrikes flyttnetto,51844
+Riket,2023,historisk,Invandring,94514
+Riket,2023,historisk,Utvandring,73434
+Riket,2023,historisk,Utrikes flyttnetto,21080
+Riket,2024,historisk,Invandring,116197
+Riket,2024,historisk,Utvandring,86449
+Riket,2024,historisk,Utrikes flyttnetto,29748
+Riket,2025,historisk,Invandring,89433
+Riket,2025,historisk,Utvandring,77487
+Riket,2025,historisk,Utrikes flyttnetto,11946
+Riket,2026,prognos,Invandring,85878
+Riket,2026,prognos,Utvandring,74763
+Riket,2026,prognos,Utrikes flyttnetto,11115
+Riket,2027,prognos,Invandring,80666
+Riket,2027,prognos,Utvandring,106099
+Riket,2027,prognos,Utrikes flyttnetto,-25433
+Riket,2028,prognos,Invandring,72731
+Riket,2028,prognos,Utvandring,63421
+Riket,2028,prognos,Utrikes flyttnetto,9310
+Riket,2029,prognos,Invandring,74549
+Riket,2029,prognos,Utvandring,58367
+Riket,2029,prognos,Utrikes flyttnetto,16182
+Riket,2030,prognos,Invandring,88801
+Riket,2030,prognos,Utvandring,58362
+Riket,2030,prognos,Utrikes flyttnetto,30439
+Riket,2031,prognos,Invandring,89541
+Riket,2031,prognos,Utvandring,58671
+Riket,2031,prognos,Utrikes flyttnetto,30870
+Riket,2032,prognos,Invandring,90251
+Riket,2032,prognos,Utvandring,58953
+Riket,2032,prognos,Utrikes flyttnetto,31298
+Riket,2033,prognos,Invandring,91005
+Riket,2033,prognos,Utvandring,59315
+Riket,2033,prognos,Utrikes flyttnetto,31690
+Riket,2034,prognos,Invandring,91821
+Riket,2034,prognos,Utvandring,59695
+Riket,2034,prognos,Utrikes flyttnetto,32126
+Riket,2035,prognos,Invandring,92694
+Riket,2035,prognos,Utvandring,60079
+Riket,2035,prognos,Utrikes flyttnetto,32615
+Riket,2036,prognos,Invandring,93625
+Riket,2036,prognos,Utvandring,60489
+Riket,2036,prognos,Utrikes flyttnetto,33136
+Riket,2037,prognos,Invandring,94606
+Riket,2037,prognos,Utvandring,60891
+Riket,2037,prognos,Utrikes flyttnetto,33715
+Riket,2038,prognos,Invandring,95676
+Riket,2038,prognos,Utvandring,61349
+Riket,2038,prognos,Utrikes flyttnetto,34327
+Riket,2039,prognos,Invandring,96839
+Riket,2039,prognos,Utvandring,61788
+Riket,2039,prognos,Utrikes flyttnetto,35051
+Riket,2040,prognos,Invandring,97979
+Riket,2040,prognos,Utvandring,62214
+Riket,2040,prognos,Utrikes flyttnetto,35765
+Varberg,2000,historisk,Invandring,182
+Varberg,2000,historisk,Utvandring,138
+Varberg,2000,historisk,Utrikes flyttnetto,44
+Varberg,2001,historisk,Invandring,199
+Varberg,2001,historisk,Utvandring,133
+Varberg,2001,historisk,Utrikes flyttnetto,66
+Varberg,2002,historisk,Invandring,181
+Varberg,2002,historisk,Utvandring,150
+Varberg,2002,historisk,Utrikes flyttnetto,31
+Varberg,2003,historisk,Invandring,165
+Varberg,2003,historisk,Utvandring,136
+Varberg,2003,historisk,Utrikes flyttnetto,29
+Varberg,2004,historisk,Invandring,189
+Varberg,2004,historisk,Utvandring,124
+Varberg,2004,historisk,Utrikes flyttnetto,65
+Varberg,2005,historisk,Invandring,194
+Varberg,2005,historisk,Utvandring,107
+Varberg,2005,historisk,Utrikes flyttnetto,87
+Varberg,2006,historisk,Invandring,222
+Varberg,2006,historisk,Utvandring,136
+Varberg,2006,historisk,Utrikes flyttnetto,86
+Varberg,2007,historisk,Invandring,274
+Varberg,2007,historisk,Utvandring,136
+Varberg,2007,historisk,Utrikes flyttnetto,138
+Varberg,2008,historisk,Invandring,266
+Varberg,2008,historisk,Utvandring,174
+Varberg,2008,historisk,Utrikes flyttnetto,92
+Varberg,2009,historisk,Invandring,360
+Varberg,2009,historisk,Utvandring,135
+Varberg,2009,historisk,Utrikes flyttnetto,225
+Varberg,2010,historisk,Invandring,336
+Varberg,2010,historisk,Utvandring,189
+Varberg,2010,historisk,Utrikes flyttnetto,147
+Varberg,2011,historisk,Invandring,319
+Varberg,2011,historisk,Utvandring,203
+Varberg,2011,historisk,Utrikes flyttnetto,116
+Varberg,2012,historisk,Invandring,297
+Varberg,2012,historisk,Utvandring,133
+Varberg,2012,historisk,Utrikes flyttnetto,164
+Varberg,2013,historisk,Invandring,434
+Varberg,2013,historisk,Utvandring,157
+Varberg,2013,historisk,Utrikes flyttnetto,277
+Varberg,2014,historisk,Invandring,546
+Varberg,2014,historisk,Utvandring,148
+Varberg,2014,historisk,Utrikes flyttnetto,398
+Varberg,2015,historisk,Invandring,532
+Varberg,2015,historisk,Utvandring,155
+Varberg,2015,historisk,Utrikes flyttnetto,377
+Varberg,2016,historisk,Invandring,651
+Varberg,2016,historisk,Utvandring,160
+Varberg,2016,historisk,Utrikes flyttnetto,491
+Varberg,2017,historisk,Invandring,427
+Varberg,2017,historisk,Utvandring,119
+Varberg,2017,historisk,Utrikes flyttnetto,308
+Varberg,2018,historisk,Invandring,440
+Varberg,2018,historisk,Utvandring,142
+Varberg,2018,historisk,Utrikes flyttnetto,298
+Varberg,2019,historisk,Invandring,440
+Varberg,2019,historisk,Utvandring,132
+Varberg,2019,historisk,Utrikes flyttnetto,308
+Varberg,2020,historisk,Invandring,310
+Varberg,2020,historisk,Utvandring,111
+Varberg,2020,historisk,Utrikes flyttnetto,199
+Varberg,2021,historisk,Invandring,407
+Varberg,2021,historisk,Utvandring,150
+Varberg,2021,historisk,Utrikes flyttnetto,257
+Varberg,2022,historisk,Invandring,358
+Varberg,2022,historisk,Utvandring,184
+Varberg,2022,historisk,Utrikes flyttnetto,174
+Varberg,2023,historisk,Invandring,331
+Varberg,2023,historisk,Utvandring,257
+Varberg,2023,historisk,Utrikes flyttnetto,74
+Varberg,2024,historisk,Invandring,426
+Varberg,2024,historisk,Utvandring,255
+Varberg,2024,historisk,Utrikes flyttnetto,171
+Varberg,2025,historisk,Invandring,267
+Varberg,2025,historisk,Utvandring,230
+Varberg,2025,historisk,Utrikes flyttnetto,37
+Varberg,2026,prognos,Invandring,304.0695610175624
+Varberg,2026,prognos,Utvandring,202.21088034403311
+Varberg,2026,prognos,Utrikes flyttnetto,101.8586806735293
+Varberg,2027,prognos,Invandring,284.850181499698
+Varberg,2027,prognos,Utvandring,202.83902702339344
+Varberg,2027,prognos,Utrikes flyttnetto,82.01115447630457
+Varberg,2028,prognos,Invandring,257.40164490414185
+Varberg,2028,prognos,Utvandring,203.2641804435822
+Varberg,2028,prognos,Utrikes flyttnetto,54.13746446055964
+Varberg,2029,prognos,Invandring,263.3974470495446
+Varberg,2029,prognos,Utvandring,203.44736897200596
+Varberg,2029,prognos,Utrikes flyttnetto,59.95007807753865
+Varberg,2030,prognos,Invandring,312.65795855056047
+Varberg,2030,prognos,Utvandring,203.60113570814326
+Varberg,2030,prognos,Utrikes flyttnetto,109.0568228424172
+Varberg,2031,prognos,Invandring,315.2919796946343
+Varberg,2031,prognos,Utvandring,203.98248802757183
+Varberg,2031,prognos,Utrikes flyttnetto,111.30949166706245
+Varberg,2032,prognos,Invandring,317.8212172468346
+Varberg,2032,prognos,Utvandring,204.38650977905766
+Varberg,2032,prognos,Utrikes flyttnetto,113.43470746777692
+Varberg,2033,prognos,Invandring,320.4804767825019
+Varberg,2033,prognos,Utvandring,204.8315597281883
+Varberg,2033,prognos,Utrikes flyttnetto,115.64891705431361
+Varberg,2034,prognos,Invandring,323.3649970458265
+Varberg,2034,prognos,Utvandring,205.2987633748117
+Varberg,2034,prognos,Utrikes flyttnetto,118.0662336710148
+Varberg,2035,prognos,Invandring,326.4869398552013
+Varberg,2035,prognos,Utvandring,205.79867659740302
+Varberg,2035,prognos,Utrikes flyttnetto,120.68826325779827
+Varberg,2036,prognos,Invandring,329.75896292439415
+Varberg,2036,prognos,Utvandring,206.34824305645213
+Varberg,2036,prognos,Utrikes flyttnetto,123.41071986794202
+Varberg,2037,prognos,Invandring,333.21158657307774
+Varberg,2037,prognos,Utvandring,206.97095739029686
+Varberg,2037,prognos,Utrikes flyttnetto,126.24062918278088
+Varberg,2038,prognos,Invandring,337.0102688260291
+Varberg,2038,prognos,Utvandring,207.67154901559888
+Varberg,2038,prognos,Utrikes flyttnetto,129.33871981043023
+Varberg,2039,prognos,Invandring,341.140330976474
+Varberg,2039,prognos,Utvandring,208.43931611800355
+Varberg,2039,prognos,Utrikes flyttnetto,132.70101485847044
+Varberg,2040,prognos,Invandring,345.1442418701818
+Varberg,2040,prognos,Utvandring,209.26574188757985
+Varberg,2040,prognos,Utrikes flyttnetto,135.87849998260197

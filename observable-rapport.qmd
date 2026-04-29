@@ -1,0 +1,1744 @@
+---
+title: "Hallands demografi 2000-2040"
+subtitle: "Historisk utveckling (2000-2025) och framskrivning (2026-2040)"
+title-block-banner: true
+title-block-color: "#FFFFFF"
+author-title: "Utgivare"
+author: "Region Halland, <br> Avdelningen för analys och samordning"
+date: today
+date-format: "D MMMM YYYY"
+format:
+  html:
+    theme: 
+      - default
+      - observable-report-styles.scss
+    toc: true
+    toc-location: left
+    toc-depth: 4
+    toc-title: "Innehåll"
+    toc-expand: 1  # Ändra från true till 1 - visar bara nivå 1 från start
+    grid:
+      sidebar-width: 300px
+      body-width: 800px
+      margin-width: 100px
+      gutter-width: 2rem
+    code-fold: true
+    highlight-style: tango
+    df-print: kable
+    code-overflow: wrap
+    smooth-scroll: true
+    css: observable-report-styles.scss
+    self-contained: true
+    lang: sv
+editor: visual
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+#| include: false
+library(tidyverse)
+
+# All data härleds från ../Data_resultat/historik-prognos_2026.rds.
+# Filen innehåller historik 2000-2025 och prognos 2026-2040 för
+# Befolkning, Födda, Döda, Inflyttning, Utflyttning, Invandring och
+# Utvandring i 7 Hallandsregioner samt Riket.
+prognosfil <- "../Data_resultat/historik-prognos_2026.rds"
+if (!file.exists(prognosfil)) {
+  stop("Saknar prognosfil: ", normalizePath(prognosfil, mustWork = FALSE))
+}
+hist_prog <- readRDS(prognosfil) %>%
+  mutate(År = as.integer(År))
+
+# Hjälpfunktion: summera Typ="total" över Kön → ett värde per Region/År/Komponent
+totals <- function(komponent) {
+  hist_prog %>%
+    filter(Komponent == komponent, Typ == "total") %>%
+    group_by(Region, År, Period) %>%
+    summarise(Värde = sum(Värde, na.rm = TRUE), .groups = "drop") %>%
+    mutate(datakalla = if_else(Period == "Historik", "historisk", "prognos")) %>%
+    select(Region, År, Värde, datakalla)
+}
+
+# Hjälpfunktion: summera Typ="detalj" över Kön → en rad per Region/År/Ålder
+detalj_per_alder <- function(komponent) {
+  hist_prog %>%
+    filter(Komponent == komponent, Typ == "detalj") %>%
+    mutate(Ålder = as.integer(Ålder)) %>%
+    group_by(Region, År, Ålder, Period) %>%
+    summarise(Värde = sum(Värde, na.rm = TRUE), .groups = "drop") %>%
+    mutate(datakalla = if_else(Period == "Historik", "historisk", "prognos"))
+}
+
+dir.create("data", showWarnings = FALSE)
+
+# 1) befolkningsdata.csv ----------------------------------------------------
+befolkningsdata <- totals("Befolkning") %>%
+  rename(Folkmängd = Värde) %>%
+  select(-datakalla) %>%
+  group_by(Region) %>%
+  arrange(År, .by_group = TRUE) %>%
+  mutate(Förändring = Folkmängd - lag(Folkmängd)) %>%
+  ungroup()
+
+write_csv(befolkningsdata, "befolkningsdata.csv")
+
+# 2) data/aldersstrukturer.csv ---------------------------------------------
+utvalda_ar_alder <- c(2000, 2005, 2010, 2015, 2020, 2025, 2030, 2035, 2040)
+aldersgrupper <- detalj_per_alder("Befolkning") %>%
+  filter(År %in% utvalda_ar_alder) %>%
+  mutate(
+    Åldersgrupp = case_when(
+      Ålder <= 19 ~ "0-19 år",
+      Ålder <= 64 ~ "20-64 år",
+      Ålder <= 79 ~ "65-79 år",
+      TRUE        ~ "80+ år"
+    )
+  ) %>%
+  group_by(År, Region, Åldersgrupp) %>%
+  summarise(Befolkning = sum(Värde, na.rm = TRUE), .groups = "drop") %>%
+  mutate(
+    År = factor(År),
+    Åldersgrupp = factor(
+      Åldersgrupp,
+      levels = c("0-19 år", "20-64 år", "65-79 år", "80+ år")
+    )
+  ) %>%
+  arrange(Region, År, Åldersgrupp)
+
+write.csv(aldersgrupper, "data/aldersstrukturer.csv", row.names = FALSE)
+
+# 3) fodelsenetto.csv -------------------------------------------------------
+fodda <- totals("Födda") %>% mutate(Variabel = "Födda")
+doda <- totals("Döda") %>% mutate(Variabel = "Döda")
+
+fodelsenetto <- bind_rows(fodda, doda) %>%
+  pivot_wider(names_from = Variabel, values_from = Värde) %>%
+  mutate(Födelsenetto = Födda - Döda) %>%
+  pivot_longer(
+    cols = c(Födda, Döda, Födelsenetto),
+    names_to = "Variabel",
+    values_to = "Värde"
+  ) %>%
+  mutate(Variabel = factor(Variabel, levels = c("Födda", "Döda", "Födelsenetto"))) %>%
+  arrange(Region, År, Variabel)
+
+write_csv(fodelsenetto, "fodelsenetto.csv")
+
+# 4) inrikesflyttningar.csv -------------------------------------------------
+inflytt <- totals("Inflyttning") %>%
+  filter(Region != "Riket") %>%
+  mutate(Variabel = "Inrikes inflyttade")
+utflytt <- totals("Utflyttning") %>%
+  filter(Region != "Riket") %>%
+  mutate(Variabel = "Inrikes utflyttade")
+
+inrikesflyttningar <- bind_rows(inflytt, utflytt) %>%
+  pivot_wider(names_from = Variabel, values_from = Värde) %>%
+  mutate(`Inrikes flyttnetto` = `Inrikes inflyttade` - `Inrikes utflyttade`) %>%
+  pivot_longer(
+    cols = c(`Inrikes inflyttade`, `Inrikes utflyttade`, `Inrikes flyttnetto`),
+    names_to = "Variabel",
+    values_to = "Värde"
+  ) %>%
+  arrange(Region, År, Variabel)
+
+write_csv(inrikesflyttningar, "inrikesflyttningar.csv")
+
+# 5) inflyttkommun.csv (Inrikes flyttnings-överskott per åldersgrupp) ------
+femarsgrupper <- function(alder) {
+  case_when(
+    alder >= 100 ~ "100+ år",
+    TRUE ~ paste0(floor(alder / 5) * 5, "-", floor(alder / 5) * 5 + 4, " år")
+  )
+}
+femars_levels <- c(
+  paste0(seq(0, 95, by = 5), "-", seq(4, 99, by = 5), " år"),
+  "100+ år"
+)
+
+inflyttning_alder <- detalj_per_alder("Inflyttning") %>%
+  filter(Region != "Riket") %>%
+  mutate(Åldersgrupp = femarsgrupper(Ålder)) %>%
+  group_by(Region, Åldersgrupp, År) %>%
+  summarise(Inflytt = sum(Värde, na.rm = TRUE), .groups = "drop")
+
+utflyttning_alder <- detalj_per_alder("Utflyttning") %>%
+  filter(Region != "Riket") %>%
+  mutate(Åldersgrupp = femarsgrupper(Ålder)) %>%
+  group_by(Region, Åldersgrupp, År) %>%
+  summarise(Utflytt = sum(Värde, na.rm = TRUE), .groups = "drop")
+
+inflyttkommun <- inflyttning_alder %>%
+  inner_join(utflyttning_alder, by = c("Region", "Åldersgrupp", "År")) %>%
+  mutate(`Inrikes flyttningsöverskott` = Inflytt - Utflytt) %>%
+  rename(`Inrikes inflyttningar` = Inflytt,
+         `Inrikes utflyttningar` = Utflytt) %>%
+  pivot_longer(
+    cols = c(`Inrikes inflyttningar`, `Inrikes utflyttningar`, `Inrikes flyttningsöverskott`),
+    names_to = "Variabel",
+    values_to = "Värde"
+  ) %>%
+  mutate(Ålder = factor(Åldersgrupp, levels = femars_levels)) %>%
+  select(Region, Ålder, Variabel, År, Värde) %>%
+  arrange(Region, Ålder, Variabel, År)
+
+write_csv(inflyttkommun, "inflyttkommun.csv")
+
+# 6) utrikesflyttningar.csv -------------------------------------------------
+inv <- totals("Invandring") %>% mutate(Variabel = "Invandring")
+utv <- totals("Utvandring") %>% mutate(Variabel = "Utvandring")
+
+utrikesflyttningar <- bind_rows(inv, utv) %>%
+  pivot_wider(names_from = Variabel, values_from = Värde) %>%
+  mutate(`Utrikes flyttnetto` = Invandring - Utvandring) %>%
+  pivot_longer(
+    cols = c(Invandring, Utvandring, `Utrikes flyttnetto`),
+    names_to = "Variabel",
+    values_to = "Värde"
+  ) %>%
+  mutate(Variabel = factor(Variabel, levels = c("Invandring", "Utvandring", "Utrikes flyttnetto"))) %>%
+  arrange(Region, År, Variabel)
+
+write_csv(utrikesflyttningar, "utrikesflyttningar.csv")
+
+# 7) data/finalfruktsamhet.csv (Summerad fruktsamhet per Region/År) --------
+fruktsamhet <- hist_prog %>%
+  filter(Komponent == "Summerad fruktsamhet", Typ == "total") %>%
+  transmute(Region, År, Variabel = "Födelserisker", Värde) %>%
+  arrange(Region, År)
+
+write_csv(fruktsamhet, "data/finalfruktsamhet.csv")
+
+```
+
+# Introduktion
+
+Följande rapport är framtagen av Region Halland och syftar till att presentera befolkningsframskrivningen för Hallands län för perioden 2026-2040 samt förklara de resultat som framskrivningen visar. För att sätta framskrivningsresultaten i sitt sammanhang beskrivs även den historiska befolkningsutvecklingen för perioden 2000-2025, vilken utgör grunden för framskrivningsberäkningarna.
+
+Rapporten är strukturerad efter de komponenter som tillsammans bestämmer befolkningsutvecklingen i en region: födda och döda, inrikes flyttningar och utrikes flyttningar. För varje komponent presenteras och analyseras framskrivningsresultaten, medan den historiska utvecklingen och olika påverkansfaktorer beskrivs i den mån de bidrar till förståelsen av framskrivningsutfallet. Anslaget är långt ifrån heltäckande men ambitionen är att förklara det mest väsentliga för respektive komponents bidrag till den framtida utvecklingen.
+
+Kapitlen om de olika komponenterna föregås av kapitlen "Befolkningsutveckling" och "Åldersstrukturer" som presenterar och förklarar det samlade framskrivningsresultatet, det vill säga det kombinerade utfallet av alla komponenter tillsammans.
+
+<details class="method-collapse">
+
+<summary>Metod</summary>
+
+::: collapse-content
+Befolkningsframskrivningen är framtagen av Region Halland med en kohort-komponentmetod på ettårsåldersklasser uppdelat på kön, kommun och län. Kohort-komponentmetoden innebär att befolkningen följs som årgångar som åldras tillsammans ett år i taget, och att varje årsklass varje år utsätts för risken att avlida, föda barn, flytta inom Sverige eller in- och utvandra. Antalet barn, döda och flyttare ett givet år är produkten av två faktorer: hur många personer som finns i åldersklassen (exponeringen) och hur stor risken är att händelsen inträffar. Det innebär att även om risktalen ligger stilla över tid kan utfallen ändras kraftigt när åldersstrukturen förändras. När 1940-talisterna når de äldsta åldrarna stiger antalet döda, inte för att dödsriskerna ändras, utan för att fler är i en ålder där dödsrisken är hög. På samma sätt sjunker antalet födda när antalet kvinnor i fertil ålder minskar. Den här mekaniska demografiska trögheten är en central del av förklaringen till hur Hallands kommuner utvecklas i framskrivningen.
+
+För varje komponent (fertilitet, dödlighet, inrikes inflyttning, inrikes utflyttning, invandring och utvandring) har ett åldersspecifikt risktal beräknats per kommun och kön. Risktalen baseras på de senaste nio årens utfall, ett fönster som är tillräckligt långt för att enskilda fluktuationer ska jämnas ut men kort nog för att fånga aktuella trender. Åren viktas dessutom så att de senare väger tyngre än de äldre. Det innebär att en pågående trend, exempelvis sjunkande fertilitet eller förändrade flyttmönster efter pandemin, slår igenom snabbare än om alla år hade vägts lika, samtidigt som ett enskilt avvikande år inte tillåts prägla framtiden. För dödligheten används en bredare och jämnt viktad baslinje, eftersom enstaka pandemiår annars riskerar att felaktigt prägla normalnivån. För komponenter där underlaget är litet (typiskt utvandring i de mindre kommunerna) slås åldrarna ihop i bredare grupper innan ett åldersmönster anpassas. Det ger stabilare skattningar utan att åldersprofilen förvanskas, vilket är särskilt viktigt i Hylte och Laholm där enstaka händelser annars får oproportionerligt stort genomslag.
+
+Risktalen fångar kommunens egen profil: hur fertiliteten är fördelad över mödrarnas ålder, vilka åldrar som flyttar in och ut, hur dödsmönstret avviker från riket. Volymerna i framskrivningen styrs däremot av Statistiska centralbyråns riksframskrivning. Konkret är kommunens invandring för ett givet år dess åldersspecifika attraktionsmönster multiplicerat med rikets totala invandringsnivå det året enligt SCB. När SCB skriver fram lägre invandring 2028-2031 till följd av minskad asyl- och anhöriginvandring följer Halland med ned i samma takt. Riket sätter nivån, kommunerna sätter fördelningen. Motsvarande logik gäller för fertilitet och dödlighet: kommunens åldersmönster, rikets framtida nivå.
+
+Det är viktigt att framhålla att detta är en framskrivning, inte en prognos. Skillnaden är central. En framskrivning visar vad som händer om de senaste årens demografiska mönster fortsätter att gälla. Vi lägger alltså inte in några antaganden om kommande bostadsbyggande, planerade företagsetableringar, infrastrukturprojekt eller politiska beslut som kan förändra flyttströmmarna framåt. Sådana faktorer finns ändå implicit med i materialet, eftersom det byggande och de etableringar som faktiskt skett under historikperioden har präglat de flyttmönster som nu skrivs fram. För en kommun där byggandet legat lågt under de senaste åren skrivs alltså ett relativt lågt inflyttningsmönster fram, även om kommunens översiktsplan pekar mot en intensivare bostadsproduktion framåt.
+
+Framskrivningen är därför ett bra planeringsunderlag för verksamheter som följer den samlade befolkningsutvecklingen (skola, hälso- och sjukvård, omsorg, kollektivtrafik), där det är åldersstrukturen och de övergripande flödena som bestämmer behoven. För frågeställningar som är direkt kopplade till specifika antaganden (exempelvis effekten av ett större bostadsprojekt, en ny industrietablering eller ett politiskt mål om befolkningstillväxt) räcker inte framskrivningen. För sådana mer prognosliknande underlag, kontakta robin.rikardsson@regionhalland.se.
+:::
+
+</details>
+
+# Befolkningsutveckling
+
+::::: results-summary
+#### Huvudresultat {.unlisted}
+
+::: {.result-item .inline}
+[Ökningstakten i både Riket och Halland bromsar in under framskrivningsperioden.]{.result-context}
+:::
+
+::: {.result-item .inline}
+[Antalet invånare i Halland förväntas öka med drygt 13 700 personer fram till 2040, ett årligt genomsnitt på drygt 900 personer.]{.result-context}
+:::
+:::::
+
+```{ojs}
+//| echo: false
+// Läs in befolkningsdata
+befolkningsdata = FileAttachment("befolkningsdata.csv").csv({typed: true})
+
+// Lista över regioner/kommuner
+regioner = ["Hallands län", "Riket", "Kungsbacka", "Varberg", "Falkenberg", "Halmstad", "Hylte", "Laholm"]
+
+// Funktion för att formatera tal med mellanslag som tusenseparator
+function formatNumber(n) {
+  return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
+
+// Förbättrad funktion för att undvika överlappande etiketter
+function calculateLabelOffsets(data, options = {}) {
+  if (data.length <= 1) return new Map();
+  
+  // Sortera data efter y-värde (högst först)
+  const sorted = [...data].sort((a, b) => (b.Värde || b.Befolkning) - (a.Värde || a.Befolkning));
+  
+  // Beräkna värdeområdet för den AKTUELLA datan (den valda regionen)
+  const values = sorted.map(d => d.Värde || d.Befolkning);
+  const minValue = Math.min(...values);
+  const maxValue = Math.max(...values);
+  const valueRange = maxValue - minValue;
+  
+  // Helt dynamisk beräkning baserat på aktuella värden
+  const minDistancePercent = options.minDistancePercent || 0.05; // Standard 5%
+  const percentageBasedDistance = valueRange * minDistancePercent;
+  
+  // Sätt ett mycket lägre absolutminimum som är proportionellt mot värdena
+  const relativeMinimum = Math.max(maxValue * 0.01, 10); // 1% av högsta värdet, minst 10
+  const effectiveMinDistance = Math.max(percentageBasedDistance, relativeMinimum);
+  
+  console.log(`Region data - Min: ${minValue}, Max: ${maxValue}, Range: ${valueRange}, EffectiveDistance: ${effectiveMinDistance}`);
+  
+  const keyField = sorted[0].Variabel ? 'Variabel' : 'Åldersgrupp';
+  const positions = sorted.map((d, i) => ({
+    key: d[keyField],
+    originalValue: d.Värde || d.Befolkning,
+    adjustedValue: d.Värde || d.Befolkning,
+    index: i
+  }));
+  
+  // Iterativt justera positioner tills inga konflikter finns
+  let maxIterations = 8;
+  let iteration = 0;
+  
+  while (iteration < maxIterations) {
+    let hasConflicts = false;
+    
+    // Kolla alla par för konflikter
+    for (let i = 0; i < positions.length - 1; i++) {
+      for (let j = i + 1; j < positions.length; j++) {
+        const upper = positions[i];
+        const lower = positions[j];
+        
+        const diff = upper.adjustedValue - lower.adjustedValue;
+        
+        if (diff < effectiveMinDistance) {
+          hasConflicts = true;
+          
+          // Mindre aggressiv justering - bara 80% av den nödvändiga justeringen
+          const adjustment = ((effectiveMinDistance - diff) * 0.8) / 2;
+          
+          // Flytta den övre uppåt och den nedre nedåt
+          upper.adjustedValue += adjustment;
+          lower.adjustedValue -= adjustment;
+        }
+      }
+    }
+    
+    if (!hasConflicts) break;
+    iteration++;
+  }
+  
+  // Skapa offset-mappen
+  const offsets = new Map();
+  positions.forEach(pos => {
+    const offset = pos.adjustedValue - pos.originalValue;
+    offsets.set(pos.key, offset);
+  });
+  
+  return offsets;
+}
+```
+
+:::::::: plot-wrapper
+::::::: plot-container
+::::: plot-header
+::: plot-title
+Fortsatt befolkningsökning men i lägre takt
+:::
+
+::: plot-subtitle
+Antal invånare och förändringsmått 2000-2040, framskrivningsperiod 2026-2040.
+:::
+
+```{ojs}
+//| echo: false
+viewof selectedRegion = Inputs.select(
+  regioner,
+  {
+    value: "Hallands län", width: 40,
+    label: null,
+  }
+)
+```
+
+```{ojs}
+//| echo: false
+viewof befolkningsvisning = Inputs.radio(
+  ["Folkmängd", "Årlig förändring", "Indexerad utveckling"],
+  {value: "Folkmängd", label: null}
+)
+```
+:::::
+
+```{ojs}
+//| echo: false
+//| classes: plot-chart
+// Beräkna data baserat på visningstyp
+processed_befolkningsdata = {
+  if (befolkningsvisning === "Folkmängd") {
+    return befolkningsdata.filter(d => d.Region === selectedRegion && d.År >= 2000);
+  } else if (befolkningsvisning === "Årlig förändring") {
+    // Visa endast årlig förändring (exkludera första året som saknar förändring)
+    return befolkningsdata.filter(d => d.Region === selectedRegion && d.År > 2000 && d.Förändring !== null);
+  } else {
+    // Indexerad utveckling - visa alla regioner
+    const baseYear = 2025;
+    const allRegions = regioner;
+    
+    return allRegions.flatMap(region => {
+      const regionData = befolkningsdata.filter(d => d.Region === region && d.År >= 2000);
+      const baseValue = regionData.find(d => d.År === baseYear);
+      
+      if (!baseValue) return [];
+      
+      return regionData.map(d => ({
+        ...d,
+        Folkmängd: (d.Folkmängd / baseValue.Folkmängd) * 100,
+        isSelected: region === selectedRegion
+      }));
+    });
+  }
+}
+
+// Rita befolkningsgraf
+Plot.plot({
+  width: 700,
+  height: 400,
+  x: {
+    label: null,
+    tickFormat: d => d.toString(),
+    grid: false,
+    line: "#005A4D",
+    tickSize: 6
+  },
+    y: {
+    label: befolkningsvisning === "Folkmängd" ? "Antal invånare" : 
+           befolkningsvisning === "Årlig förändring" ? "Förändring antal invånare" : 
+           "Index (2025 = 100)",
+    grid: "#797d7f",
+    line: "#005A4D",
+    nice: true,
+    tickSize: 6,
+    tickFormat: d => befolkningsvisning === "Indexerad utveckling" ? d.toFixed(1) : formatNumber(d),
+    labelOffset: 0,
+    labelArrow: "none",
+    textAnchor: "end"
+  },
+  marginLeft: 70,
+  marginRight: 100,
+  style: {
+    fontSize: "12.5px",
+    color: "#002b1f"
+  },
+  marks: [
+    // Nolllinje för förändringsvy
+    ...(befolkningsvisning === "Årlig förändring" ? 
+      [Plot.ruleY([0], {stroke: "#005A4D", strokeWidth: 1})] : []),
+    
+    // 100-linje för indexvy
+    ...(befolkningsvisning === "Indexerad utveckling" ? 
+      [Plot.ruleY([100], {stroke: "#005A4D", strokeWidth: 1})] : []),
+
+    // Framskrivningsmarkering (ljus bakgrund för framskrivningsår)
+    Plot.rect([{x1: 2025.5, x2: 2040}], {
+      x1: "x1",
+      x2: "x2",
+      fill: "#E5F2E5",
+      fillOpacity: 0.3
+    }),
+    
+    // Text för framskrivningsperiod
+    Plot.text(["Framskrivningsperiod"], {
+      x: 2032.25,
+      frameAnchor: "top",
+      dy: -10,
+      textAnchor: "middle",
+      fill: "#555",
+      fontSize: 13,
+      fontStyle: "italic"
+    }),
+    
+    // Vertikal referenslinje som följer musen
+    Plot.ruleX(processed_befolkningsdata, Plot.pointerX({
+      x: "År", 
+      stroke: "#999", 
+      strokeWidth: 1, 
+      strokeDasharray: "3,3"
+    })),
+    
+    // Linjer för indexvyn (bakgrundslinjer för egioner)
+    ...(befolkningsvisning === "Indexerad utveckling" ? [
+      Plot.line(processed_befolkningsdata.filter(d => !d.isSelected), {
+        x: "År",
+        y: "Folkmängd",
+        stroke: "Region",
+        strokeWidth: 1.5,
+        strokeOpacity: 0.3
+      })
+    ] : []),
+    
+    // Huvudlinje (för enskild region eller highlightad region)
+    Plot.line(befolkningsvisning === "Indexerad utveckling" ? 
+      processed_befolkningsdata.filter(d => d.isSelected) : processed_befolkningsdata, {
+      x: "År",
+      y: befolkningsvisning === "Indexerad utveckling" ? "Folkmängd" :
+         befolkningsvisning === "Folkmängd" ? "Folkmängd" : "Förändring",
+      stroke: "#005A4D",
+      strokeWidth: 3
+    }),
+    
+    // Punkter för alla år utom sista
+    ...(befolkningsvisning === "Indexerad utveckling" ? [
+      // Punkter för den valda regionen
+      Plot.dot(processed_befolkningsdata.filter(d => d.isSelected && d.År < Math.max(...processed_befolkningsdata.map(d => d.År))), {
+        x: "År",
+        y: "Folkmängd",
+        fill: "#005A4D",
+        r: 3.5,
+        fillOpacity: 0.6
+      })
+    ] : [
+      Plot.dot(processed_befolkningsdata.filter(d => d.År < Math.max(...processed_befolkningsdata.map(d => d.År))), {
+        x: "År",
+        y: befolkningsvisning === "Folkmängd" ? "Folkmängd" : "Förändring",
+        fill: "#005A4D",
+        r: 3.5,
+        fillOpacity: 0.6
+      })
+    ]),
+    
+    // Större punkt för sista året
+    ...(befolkningsvisning === "Indexerad utveckling" ? [
+      // Större punkt för den valda regionen
+      Plot.dot(processed_befolkningsdata.filter(d => d.isSelected && d.År === Math.max(...processed_befolkningsdata.map(d => d.År))), {
+        x: "År",
+        y: "Folkmängd",
+        fill: "#005A4D",
+        r: 4.5
+      })
+    ] : [
+      Plot.dot(processed_befolkningsdata.filter(d => d.År === Math.max(...processed_befolkningsdata.map(d => d.År))), {
+        x: "År",
+        y: befolkningsvisning === "Folkmängd" ? "Folkmängd" : "Förändring",
+        fill: "#005A4D",
+        r: 4.5
+      })
+    ]),
+    
+    // Text för sista värdet (endast för folkmängd)
+    ...(befolkningsvisning === "Folkmängd" ? [
+      Plot.text(processed_befolkningsdata.filter(d => d.År === Math.max(...processed_befolkningsdata.map(d => d.År))), {
+        x: "År",
+        y: "Folkmängd",
+        text: d => formatNumber(d.Folkmängd),
+        fill: "#005A4D",
+        dx: 8,
+        textAnchor: "start",
+        fontSize: 12.5,
+        fontWeight: "600"
+      })
+    ] : []),
+    
+    // Etikett för indexerad vy (endast för vald region)
+    ...(befolkningsvisning === "Indexerad utveckling" ? [
+      Plot.text(processed_befolkningsdata.filter(d => d.isSelected && d.År === Math.max(...processed_befolkningsdata.map(d => d.År))), {
+        x: "År",
+        y: "Folkmängd", 
+        text: "Region",
+        fill: "#005A4D",
+        dx: 8,
+        textAnchor: "start",
+        fontSize: 12.5,
+        fontWeight: "600"
+      })
+    ] : []),
+    
+    // Tooltip
+    Plot.tip(processed_befolkningsdata, Plot.pointerX({
+      x: "År",
+      y: befolkningsvisning === "Indexerad utveckling" ? "Folkmängd" :
+         befolkningsvisning === "Folkmängd" ? "Folkmängd" : "Förändring",
+      title: d => befolkningsvisning === "Folkmängd" ? 
+        `${d.Region}\nÅr: ${d.År}\nFolkmängd: ${formatNumber(d.Folkmängd)}` :
+        befolkningsvisning === "Årlig förändring" ?
+        `${d.Region}\nÅr: ${d.År}\nFörändring: ${(d.Förändring > 0 ? "+" : "") + formatNumber(d.Förändring)}` :
+        `${d.Region}\nÅr: ${d.År}\nIndex: ${d.Folkmängd.toFixed(1)}`,
+      fontSize: 14,
+      lineHeight: 1.5,
+      frameAnchor: "bottom"
+    }))
+  ]
+})
+```
+
+::: plot-footer
+*Källa: Region Halland och SCB*
+:::
+:::::::
+::::::::
+
+## Bakgrund
+
+Befolkningsutvecklingen är central för en regions framtida förutsättningar. Den påverkar allt från arbetsmarknadens storlek och skatteunderlag till behovet av välfärdstjänster som skola, vård och omsorg. En växande befolkning skapar ofta positiva spiraler med ökade investeringar, fler arbetstillfällen och ett bredare utbud av service. Omvänt kan en stagnerande eller minskande befolkning leda till svårigheter att upprätthålla servicenivåer och attrahera nya invånare och företag. För regional planering är det därför avgörande att förstå både nuvarande trender och framtida framskrivningar.
+
+## Nuläge och historisk utveckling
+
+Vid utgången av 2025 hade Hallands län 346 088 invånare. Regionen har varit en av de tydliga vinnarna i den nya ekonomiska geografin och haft en kraftig befolkningsökning under 2000-talet med drygt 71 000 nya hallänningar, ett genomsnitt på knappt 3 000 personer om året. Hallands attraktiva läge mellan storstadsregionerna, kombinerat med kust, natur och en egen stark arbetsmarknad, har gjort länet till en av landets mest eftertraktade inflyttningsregioner.
+
+Under rekordperioden 2014-2019 låg ökningstakten på drygt 4 500 personer per år. De senaste tre åren har dock utvecklingen bromsat in avsevärt: 2023 ökade befolkningen med 941 personer, 2024 med 1 328 och 2025 med 1 014 personer. Utvecklingen kan därför sägas ha gått från exceptionellt höga nivåer till historiskt sett låga ökningstal. Trots inbromsningen behåller Halland sin position som en tillväxtregion, vilket blir tydligt när man jämför med många andra län som redan idag har negativ befolkningsutveckling.
+
+## Framskrivningsresultat
+
+Befolkningsframskrivningen visar att antalet invånare i Hallands län förväntas öka med drygt 13 700 personer under framskrivningsperioden 2026-2040, vilket motsvarar ett årligt genomsnitt på drygt 900 personer. I förhållande till den historiska utvecklingen är detta en låg ökningstakt, men i ett nationellt perspektiv behåller Halland sin position som en tillväxtregion. Många andra län förväntas ha stillastående eller minskande befolkning under samma period.
+
+På kommunnivå beräknas fem av sex kommuner ha en positiv utveckling. Varberg står för den största procentuella ökningen (+9,2 procent), följt av Falkenberg (+4,6 procent) och Halmstad (+4,2 procent). Laholm och Kungsbacka väntas växa svagare med 2,5 respektive 1,2 procent. Endast Hylte förväntas ha en negativ utveckling med en minskning om 9,2 procent under framskrivningsperioden. Att majoriteten av länets kommuner fortsätter växa är ovanligt i ett nationellt perspektiv där allt fler kommuner brottas med vikande befolkningsunderlag.
+
+## Analys
+
+Inbromsningen i befolkningsökningen beror på flera samverkande faktorer. På nationell nivå beräknas Sveriges befolkning öka med knappt 22 000 personer årligen under framskrivningsperioden 2026-2040, jämfört med drygt 71 000 personer per år under 2000-2024. Inbromsningen blir särskilt påtaglig 2027 då rikets befolkning beräknas minska med nästan 30 000 personer. Bakom denna minskning ligger främst att massflyktsdirektivet enligt nu gällande regelverk upphör den 4 mars 2027, vilket SCB:s riksframskrivning antar leder till att de som kommit som flyktingar, framför allt från Ukraina, lämnar Sverige. Det ger en kraftigt förhöjd utvandring under 2027 och en lägre invandring även 2028-2029. På längre sikt förklaras den lägre tillväxten av ett strukturellt negativt födelsenetto till följd av låga fruktsamhetstal och ökande dödstal när en allt större del av befolkningen tillhör gruppen äldre äldre (80+ år).
+
+I den regionala framskrivningen för Halland tillämpas ett alternativt antagande där massflyktsdirektivet förlängs och de flyktingar som kommit till länet stannar kvar. Halland får därför inte den utvandringstopp 2027 som ingår i SCB:s riksframskrivning, utan den lokala migrationsutvecklingen följer ett jämnare förlopp över hela framskrivningsperioden.
+
+För Hallands del innebär den nationella utvecklingen att konkurrensen om nya invånare hårdnar. Men regionen har goda förutsättningar att klara denna konkurrens. Halland har under lång tid byggt upp en stark position med en diversifierad arbetsmarknad, attraktiva boendemiljöer och god infrastruktur. Närheten till växande storstadsregioner i kombination med egen styrka gör att Halland sannolikt kommer fortsätta attrahera inflyttare även när den nationella tillväxten avtar.
+
+Den avtagande befolkningstillväxten ställer dock nya krav på regional och kommunal planering. Med färre nya invånare blir det viktigare att både behålla befintlig befolkning och aktivt arbeta för att stärka regionens attraktivitet. Hallands relativt goda utgångsläge ger handlingsutrymme, men det krävs fortsatta satsningar på bostadsbyggande, arbetsmarknadsutveckling och attraktiva livsmiljöer för att behålla positionen som en av landets tillväxtregioner.
+
+# Åldersstrukturer
+
+::::: results-summary
+#### Huvudresultat {.unlisted}
+
+::: {.result-item .inline}
+[Försörjningskvoten i Halland ökar under framskrivningsperioden.]{.result-context}
+:::
+
+::: {.result-item .inline}
+[Under framskrivningsperioden kommer antalet äldre att öka samtidigt som antalet yngre blir färre. Särskilt hög är ökningen bland äldre äldre (80+ år).]{.result-context}
+:::
+:::::
+
+```{r}
+#| include: false
+# data/aldersstrukturer.csv genereras i den centrala setup-chunken.
+```
+
+```{ojs}
+//| echo: false
+// Läs in åldersstruktursdata
+aldersdata = FileAttachment("data/aldersstrukturer.csv").csv({typed: true})
+
+// Lista över regioner för åldersdata
+regioner_alder = ["Hallands län", "Riket", "Kungsbacka", "Varberg", "Falkenberg", "Halmstad", "Hylte", "Laholm"]
+```
+
+:::::::: plot-wrapper
+::::::: plot-container
+::::: plot-header
+::: plot-title
+Fler äldre och färre yngre
+:::
+
+::: plot-subtitle
+Befolkning efter åldersgrupper och förändringstal 2000-2040, framskrivningsperiod 2026-2040.
+:::
+
+```{ojs}
+//| echo: false
+viewof selectedRegionAlder = Inputs.select(
+  regioner_alder,
+  {
+    value: "Hallands län", width: 40,
+    label: null,
+  }
+)
+```
+
+```{ojs}
+//| echo: false
+viewof visningstyp = Inputs.radio(
+  ["Antal", "Differens jämfört med 2025", "Försörjningskvot"],
+  {value: "Antal", label: null}
+)
+```
+:::::
+
+```{ojs}
+//| echo: false
+//| classes: plot-chart
+// Beräkna data baserat på visningstyp
+processed_aldersdata = {
+  const filtered = aldersdata.filter(d => d.Region === selectedRegionAlder);
+  
+  if (visningstyp === "Antal") {
+    return filtered;
+  } else if (visningstyp === "Differens jämfört med 2025") {
+    // Beräkna ackumulerad förändring från 2025 för alla år
+    const baseYear = filtered.filter(d => d.År === 2025);
+    return filtered.map(d => {
+      const baseValue = baseYear.find(b => b.Åldersgrupp === d.Åldersgrupp);
+      return {
+        ...d,
+        Befolkning: baseValue ? d.Befolkning - baseValue.Befolkning : 0
+      };
+    });
+  } else {
+    // Beräkna försörjningskvot: (0-19 + 65+) / 20-64
+    const years = [...new Set(filtered.map(d => d.År))];
+    return years.flatMap(year => {
+      const yearData = filtered.filter(d => d.År === year);
+      const young = yearData.find(d => d.Åldersgrupp === "0-19 år")?.Befolkning || 0;
+      const elderly65_79 = yearData.find(d => d.Åldersgrupp === "65-79 år")?.Befolkning || 0;
+      const elderly80 = yearData.find(d => d.Åldersgrupp === "80+ år")?.Befolkning || 0;
+      const working = yearData.find(d => d.Åldersgrupp === "20-64 år")?.Befolkning || 0;
+      
+      const elderly = elderly65_79 + elderly80;
+      const dependents = young + elderly;
+      const totalRatio = working > 0 ? (dependents / working) * 100 : 0;
+      const youngRatio = working > 0 ? (young / working) * 100 : 0;
+      const elderlyRatio = working > 0 ? (elderly / working) * 100 : 0;
+      
+      return [
+        {
+          År: year,
+          Region: selectedRegionAlder,
+          Åldersgrupp: "Försörjningskvot",
+          Befolkning: totalRatio
+        },
+        {
+          År: year,
+          Region: selectedRegionAlder,
+          Åldersgrupp: "Från yngre",
+          Befolkning: youngRatio
+        },
+        {
+          År: year,
+          Region: selectedRegionAlder,
+          Åldersgrupp: "Från äldre",
+          Befolkning: elderlyRatio
+        }
+      ];
+    });
+  }
+}
+
+// Beräkna label offsets för sista årets data för åldersstruktur
+lastYearAldersData = processed_aldersdata.filter(d => d.År === Math.max(...processed_aldersdata.map(d => d.År)));
+
+// Använd dynamisk offset-beräkning för åldersdata
+labelOffsetsAlders = calculateLabelOffsets(lastYearAldersData, {
+ minDistancePercent: 0.08  // 5% för alla visningstyper
+});
+
+// Rita åldersstruktursgraf
+Plot.plot({
+  width: 700,
+  height: 400,
+  x: {
+    label: null,
+    tickFormat: d => d.toString(),
+    grid: false,
+    line: "#005A4D",
+    tickSize: 6
+  },
+  y: {
+    label: visningstyp === "Antal" ? "Antal invånare" : 
+           visningstyp === "Differens jämfört med 2025" ? "Förändring sedan 2025" :
+           "Försörjningskvot",
+    grid: "#797d7f",
+    line: "#005A4D", 
+    nice: true,
+    tickSize: 6,
+    tickFormat: d => visningstyp === "Försörjningskvot" ? d.toFixed(1) : formatNumber(d),
+    labelOffset: 0,
+    labelArrow: "none",
+    textAnchor: "end"
+  },
+  color: {
+    legend: false,
+    domain: ["0-19 år", "20-64 år", "65-79 år", "80+ år", "Försörjningskvot", "Från yngre", "Från äldre"],
+    range: ["#005A4D", "#004C70", "#B33D4A", "#E8A03D", "#1E8C6A", "#5DADE2", "#F17C67"]
+  },
+  marginLeft: 70,
+  marginRight: 120,
+  style: {
+    fontSize: "12.5px",
+    color: "#002b1f"
+  },
+  marks: [
+    // Vertikal referenslinje som följer musen
+    Plot.ruleX(processed_aldersdata, Plot.pointerX({
+      x: "År", 
+      stroke: "#999", 
+      strokeWidth: 1, 
+      strokeDasharray: "3,3"
+    })),
+    
+    // Nolllinje för förändringsvy
+    ...(visningstyp === "Differens jämfört med 2025" ? 
+      [Plot.ruleY([0], {stroke: "#005A4D", strokeWidth: 1})] : []),
+    
+    // Framskrivningsmarkering (ljus bakgrund för framskrivningsår)
+    Plot.rect([{x1: 2025.5, x2: 2040}], {
+      x1: "x1",
+      x2: "x2", 
+      fill: "#E5F2E5",
+      fillOpacity: 0.3
+    }),
+    
+    // Text för framskrivningsperiod
+    Plot.text(["Framskrivningsperiod"], {
+      x: 2032.25,
+      frameAnchor: "top",
+      dy: -10,
+      textAnchor: "middle",
+      fill: "#555",
+      fontSize: 13,
+      fontStyle: "italic"
+    }),
+    
+    // Linjer för varje åldersgrupp
+    Plot.line(processed_aldersdata, {
+      x: "År",
+      y: "Befolkning", 
+      stroke: "Åldersgrupp",
+      strokeWidth: 3
+    }),
+    
+    // Punkter för alla år utom sista
+    Plot.dot(processed_aldersdata.filter(d => d.År < Math.max(...processed_aldersdata.map(d => d.År))), {
+      x: "År",
+      y: "Befolkning",
+      fill: "Åldersgrupp",
+      r: 3.5,
+      fillOpacity: 0.6
+    }),
+    
+    // Större punkter för sista året
+    Plot.dot(processed_aldersdata.filter(d => d.År === Math.max(...processed_aldersdata.map(d => d.År))), {
+      x: "År", 
+      y: "Befolkning",
+      fill: "Åldersgrupp",
+      r: 4.5
+    }),
+    
+    // Linjer från punkter till etiketter om de flyttats (åldersstruktursgrafen)
+    Plot.link(lastYearAldersData.filter(d => Math.abs(labelOffsetsAlders.get(d.Åldersgrupp) || 0) > 1), {
+      x1: "År",
+      y1: "Befolkning",
+      x2: "År",
+      y2: d => d.Befolkning + (labelOffsetsAlders.get(d.Åldersgrupp) || 0),
+      stroke: "Åldersgrupp",
+      strokeWidth: 1,
+      strokeOpacity: 0.3,
+      strokeDasharray: "2,2",
+      dx1: 6,
+      dx2: 6
+    }),
+    
+    // Etiketter för sista värdet (åldersgrupp namn) med dynamiska offsets
+    Plot.text(lastYearAldersData, {
+      x: "År",
+      y: d => d.Befolkning + (labelOffsetsAlders.get(d.Åldersgrupp) || 0),
+      text: "Åldersgrupp",
+      fill: "Åldersgrupp", 
+      dx: 8,
+      textAnchor: "start",
+      fontSize: 12.5,
+      fontWeight: "600"
+    }),
+    
+    // Tooltip
+    Plot.tip(processed_aldersdata, Plot.pointerX({
+      x: "År",
+      y: "Befolkning",
+      title: d => `${d.Åldersgrupp}\nÅr: ${d.År}\n${visningstyp === "Antal" ? "Befolkning" : visningstyp === "Differens jämfört med 2025" ? "Förändring" : "Kvot"}: ${visningstyp === "Försörjningskvot" ? d.Befolkning.toFixed(1) : formatNumber(d.Befolkning)}`,
+      fontSize: 14,
+      lineHeight: 1.5,
+      frameAnchor: "bottom"
+    }))
+  ]
+})
+```
+
+::: plot-footer
+*Källa: Region Halland och SCB*
+:::
+:::::::
+::::::::
+
+## Bakgrund
+
+Hur många som befinner sig i olika åldersgrupper och balansen mellan dem har avgörande betydelse för planeringsförutsättningarna. Antalet barn och unga påverkar behovet av förskolor och skolor, antalet äldre styr behoven inom vård och omsorg medan antalet i arbetsför ålder dimensionerar både arbetskraftsutbudet och skatteunderlagets storlek.
+
+För att förstå balansen mellan dessa grupper används ofta den demografiska försörjningskvoten som nyckeltal. Detta mått visar relationen mellan antalet personer i arbetsför ålder (20-64 år) och antalet i övriga åldrar. Kvoten ger en bild av hur många personer varje individ i arbetsför ålder behöver "försörja" utöver sig själv genom skatter och arbetsinsatser. En kvot på 80 betyder exempelvis att 100 personer i arbetsför ålder ska försörja sig själva plus 80 personer i andra åldrar. Måttet är centralt för att bedöma en regions ekonomiska bärkraft och framtida utmaningar inom välfärden; ju högre kvot, desto större påfrestning på både ekonomi och kompetensförsörjning.
+
+## Nuläge och historisk utveckling
+
+I Sverige är den demografiska försörjningskvoten 77,0, vilket innebär att 100 personer i arbetsför ålder ska försörja sig själva plus 77 andra personer. Bakom riksgenomsnittet döljer sig stora skillnader: från 124 i Övertorneå till endast 52 i Solna. Dessa variationer beror ofta på långsiktiga flyttmönster där yngre lämnat kommuner för utbildning och arbete, vilket över tid skapat självförstärkande effekter. Inflyttningskommuner tenderar att få en ung åldersammansättning och utflyttningskommuner en betydligt äldre sådan.
+
+Hallands försörjningskvot ligger på 87,5, vilket är högre än riksgenomsnittet. Detta beror på att både andelen yngre och äldre är högre i Halland än i riket. Regionen har över tid haft ett positivt inflyttningsnetto av barnfamiljer och äldre, samtidigt som många i åldrarna 20-29 år söker sig till andra regioner för studier. Detta skapar en speciell åldersprofil där Halland har relativt många barn, förhållandevis få unga vuxna, och sedan en successiv återflyttning som ger höga andelar i "äldre arbetsför ålder". Regionen, och i synnerhet de mer utpräglade turistkommunerna, är också attraktiva för inflyttning bland äldre åldersgrupper.
+
+De senaste åren har andelen äldre (65+ år) i Halland ökat snabbare än andelen yngre (0-19 år), och under 2025 passerade gruppen äldre gruppen yngre i länet som helhet. I flera av länets kommuner har gruppen äldre redan tidigare blivit större än den yngre åldersgruppen.
+
+Bland länets kommuner varierar försörjningskvoten från 79,1 i Halmstad till 97,5 i Laholm. Samtliga kommuner ligger över riksgenomsnittet. Halmstads lägre kvot förklaras av högskolan och inflyttning av unga, medan övriga kommuner har en högre andel barn och äldre.
+
+## Framskrivning
+
+Under framskrivningsperioden väntas betydande förändringar i ålderssammansättningen. I Halland ökar antalet äldre (65+ år) med drygt 17 800 personer fram till 2040, varav gruppen äldre äldre (80+ år) står för knappt hälften av ökningen. Samtidigt minskar antalet yngre (0-19 år) med drygt 8 300 personer. Antalet i arbetsför ålder fortsätter dock att öka, om än i måttlig takt, med drygt 4 200 personer. Att antalet personer i ej arbetsför ålder ökar mer än antalet i arbetsför ålder innebär att försörjningskvoten i Halland stiger från 87,5 till 90,6. För att upprätthålla dagens försörjningsbörda hade den arbetsföra delen av befolkningen behövt öka med ytterligare drygt 6 600 personer.
+
+En viktig notering är att det sker en tydlig tyngdpunktsförskjutning i försörjningsbördans sammansättning. Vid framskrivningsperiodens slut förväntas antalet äldre vida överstiga antalet yngre. Att gruppen äldre växer snabbt beror på ökad medellivslängd i kombination med att stora födelsekullar når pensionsålder respektive 80-årsåldern. Under framskrivningsperioden passerar 1940-talisterna 80 år och 1960-talisterna närmar sig pensionsålder. Att gruppen yngre minskar beror i huvudsak på lägre födelsetal.
+
+Utvecklingen varierar mellan kommunerna. Försörjningskvoten förväntas öka mest i Kungsbacka och Varberg, medan den förblir relativt oförändrad i Halmstad, Falkenberg och Hylte. Mönstret är dock detsamma i alla kommuner: antalet yngre minskar samtidigt som antalet äldre ökar, men i olika takt och omfattning beroende på kommunens nuvarande åldersstruktur.
+
+## Analys
+
+Den ökande försörjningskvoten från 87,5 till 90,6 innebär att varje person i arbetsför ålder kommer att behöva bidra mer till välfärdens finansiering. Detta är en utmaning, men inte oöverkomlig. Flera faktorer kan mildra effekterna: en högre sysselsättningsgrad bland dem som redan är i arbetsför ålder, att fler arbetar längre upp i åldrarna (Pensionsmyndigheten räknar med att den lägsta pensionsåldern höjs till 67 år 2030) samt ökad inflyttning av personer i arbetsför ålder. Hallands attraktivitet som bostadsregion ger goda förutsättningar för att locka nya invånare i yrkesverksam ålder.
+
+Den tyngdpunktsförskjutning som sker, från en jämn fördelning mellan yngre och äldre till en tydlig övervikt av äldre, får olika konsekvenser för olika verksamheter. Medan behovet av förskolor och grundskolor minskar, ökar behoven inom äldreomsorgen markant. För Region Halland är det särskilt väsentligt att gruppen 80+ år står för en stor del av ökningen, eftersom detta är den mest vårdintensiva åldersgruppen. Denna grupp förväntas öka med 35 procent under framskrivningsperioden, vilket ställer stora krav på både hälso- och sjukvårdens kapacitet och kompetensförsörjning.
+
+Utvecklingen är inte unik för Halland utan speglar en nationell trend där andelen äldre ökar samtidigt som andelen barn och unga minskar. Det faktum att Halland trots allt förväntas ha en fortsatt ökning av befolkningen i arbetsför ålder, till skillnad från många andra regioner, ger relativt sett bättre förutsättningar att möta de demografiska utmaningarna.
+
+# Födda och döda
+
+:::: results-summary
+#### Huvudresultat {.unlisted}
+
+::: {.result-item .inline}
+[Halland förväntas att ha ett negativt födelsenetto under framskrivningsperioden som en följd av låga fruktsamhetstal och en åldrande befolkning.]{.result-context}
+:::
+::::
+
+```{r}
+#| include: false
+# fodelsenetto.csv genereras i den centrala setup-chunken.
+# data/finalfruktsamhet.csv är kopierad oförändrad från tidigare rapport
+# (kan ej härledas ur historik-prognos_2026.rds).
+```
+
+```{ojs}
+//| echo: false
+// Läs in födelsedata
+fodelsedata = FileAttachment("fodelsenetto.csv").csv({typed: true})
+
+// Läs in fruktsamhetsdata
+fruktsamhetsdata = FileAttachment("data/finalfruktsamhet.csv").csv({typed: true}).then(data => 
+  data.map(d => ({
+    ...d,
+    Värde: typeof d.Värde === 'string' ? parseFloat(d.Värde.replace(',', '.')) : d.Värde
+  })).sort((a, b) => a.Region.localeCompare(b.Region) || a.År - b.År)
+)
+
+// Lista över regioner
+regioner_fodelse = ["Hallands län", "Riket", "Kungsbacka", "Varberg", "Falkenberg", "Halmstad", "Hylte", "Laholm"]
+```
+
+:::::::: plot-wrapper
+::::::: plot-container
+::::: plot-header
+::: plot-title
+Negativt födelsenetto under framskrivningsperioden
+:::
+
+::: plot-subtitle
+Antal födda, döda och födelsenetto 2000-2040, framskrivningsperiod 2026-2040.
+:::
+
+```{ojs}
+//| echo: false
+viewof selectedRegionFodelse = Inputs.select(
+  regioner_fodelse,
+  {
+    value: "Hallands län", width: 40,
+    label: null,
+  }
+)
+```
+
+```{ojs}
+//| echo: false
+viewof fodelsevisning = Inputs.radio(
+  ["Födda och döda", "Summerad fruktsamhet"],
+  {value: "Födda och döda", label: null}
+)
+```
+:::::
+
+```{ojs}
+//| echo: false
+//| classes: plot-chart
+// Beräkna data baserat på visningstyp
+processed_fodelsedata = {
+  if (fodelsevisning === "Födda och döda") {
+    return fodelsedata.filter(d => d.Region === selectedRegionFodelse);
+  } else {
+    // Visa fruktsamhetsdata för vald region
+    return fruktsamhetsdata.filter(d => d.Region === selectedRegionFodelse);
+  }
+}
+
+// Beräkna label offsets för sista årets data om vi visar födelsedata
+lastYearFodelseData = fodelsevisning === "Födda och döda" 
+  ? processed_fodelsedata.filter(d => d.År === Math.max(...processed_fodelsedata.map(d => d.År)))
+  : [];
+
+// Använd dynamisk offset-beräkning för födelsedata
+labelOffsetsFodelse = fodelsevisning === "Födda och döda" 
+  ? calculateLabelOffsets(lastYearFodelseData, {
+     minDistancePercent: 0.08  // 5% av värdeområdet
+    }) 
+  : new Map();
+
+// Rita graf för födda och döda
+Plot.plot({
+  width: 700,
+  height: 400,
+  x: {
+    label: null,
+    tickFormat: d => d.toString(),
+    grid: false,
+    line: "#005A4D",
+    tickSize: 6
+  },
+  y: {
+    label: fodelsevisning === "Födda och döda" ? "Antal personer" : "Summerad fruktsamhet",
+    grid: "#797d7f",
+    line: "#005A4D", 
+    nice: true,
+    tickSize: 6,
+    tickFormat: d => fodelsevisning === "Födda och döda" ? formatNumber(d) : d.toFixed(2),
+    labelOffset: 0,
+    labelArrow: "none",
+    textAnchor: "end"
+  },
+  color: {
+    legend: false,
+    domain: ["Födda", "Döda", "Födelsenetto", "Födelserisker"],
+    range: ["#005A4D", "#B33D4A", "#004C70", "#1E8C6A"]
+  },
+  marginLeft: 70,
+  marginRight: 120,
+  style: {
+    fontSize: "12.5px",
+    color: "#002b1f"
+  },
+  marks: [
+    // Vertikal referenslinje som följer musen
+    Plot.ruleX(processed_fodelsedata, Plot.pointerX({
+      x: "År", 
+      stroke: "#999", 
+      strokeWidth: 1, 
+      strokeDasharray: "3,3"
+    })),
+    
+    // Nolllinje
+    Plot.ruleY([0], {stroke: "#005A4D", strokeWidth: 1}),
+    
+    // Framskrivningsmarkering (ljus bakgrund för framskrivningsår)
+    Plot.rect([{x1: 2025.5, x2: 2040}], {
+      x1: "x1",
+      x2: "x2", 
+      fill: "#E5F2E5",
+      fillOpacity: 0.3
+    }),
+    
+    // Text för framskrivningsperiod
+    Plot.text(["Framskrivningsperiod"], {
+      x: 2032.25,
+      frameAnchor: "top",
+      dy: -10,
+      textAnchor: "middle",
+      fill: "#555",
+      fontSize: 13,
+      fontStyle: "italic"
+    }),
+    
+    // Linjer för varje variabel
+    Plot.line(processed_fodelsedata, {
+      x: "År",
+      y: fodelsevisning === "Födda och döda" ? "Värde" : "Värde", 
+      stroke: "Variabel",
+      strokeWidth: 3
+    }),
+    
+    // Punkter för alla år utom sista
+    Plot.dot(processed_fodelsedata.filter(d => d.År < Math.max(...processed_fodelsedata.map(d => d.År))), {
+      x: "År",
+      y: fodelsevisning === "Födda och döda" ? "Värde" : "Värde",
+      fill: "Variabel",
+      r: 3.5,
+      fillOpacity: 0.6
+    }),
+    
+    // Större punkter för sista året
+    Plot.dot(processed_fodelsedata.filter(d => d.År === Math.max(...processed_fodelsedata.map(d => d.År))), {
+      x: "År", 
+      y: fodelsevisning === "Födda och döda" ? "Värde" : "Värde",
+      fill: "Variabel",
+      r: 4.5
+    }),
+    
+    // Etiketter för sista värdet (endast för födelsedata) med dynamiska offsets
+    ...(fodelsevisning === "Födda och döda" ? [
+      // Linjer från punkter till etiketter om de flyttats
+      Plot.link(lastYearFodelseData.filter(d => Math.abs(labelOffsetsFodelse.get(d.Variabel) || 0) > 1), {
+        x1: "År",
+        y1: "Värde",
+        x2: "År",
+        y2: d => d.Värde + (labelOffsetsFodelse.get(d.Variabel) || 0),
+        stroke: "Variabel",
+        strokeWidth: 1,
+        strokeOpacity: 0.3,
+        strokeDasharray: "2,2",
+        dx1: 6,
+        dx2: 6
+      }),
+      
+      Plot.text(lastYearFodelseData, {
+        x: "År",
+        y: d => d.Värde + (labelOffsetsFodelse.get(d.Variabel) || 0),
+        text: "Variabel",
+        fill: "Variabel", 
+        dx: 8,
+        textAnchor: "start",
+        fontSize: 12.5,
+        fontWeight: "600"
+      })
+    ] : []),
+    
+    // Tooltip
+    Plot.tip(processed_fodelsedata, Plot.pointerX({
+      x: "År",
+      y: fodelsevisning === "Födda och döda" ? "Värde" : "Värde",
+      title: d => fodelsevisning === "Födda och döda" ? 
+        `${d.Variabel}\nÅr: ${d.År}\nAntal: ${formatNumber(d.Värde)}` :
+        `År: ${d.År}\nSummerad fruktsamhet: ${d.Värde.toFixed(2)}`,
+      fontSize: 14,
+      lineHeight: 1.5,
+      frameAnchor: "bottom"
+    }))
+  ]
+})
+```
+
+::: plot-footer
+*Källa: Region Halland och SCB*
+:::
+:::::::
+::::::::
+
+## Bakgrund
+
+Balansen mellan födda och döda utgör den naturliga befolkningsförändringen (födelsenetto) och är av stor betydelse för ett lands långsiktiga utveckling och demografiska sammansättning. Ett positivt födelsenetto innebär att befolkningen växer av egen kraft, vilket skapar en yngre åldersstruktur och säkrar framtida arbetskraft och skatteunderlag. Omvänt leder ett negativt födelsenetto till en åldrande befolkning där allt färre ska försörja allt fler.
+
+För att förstå utvecklingen av antalet födda används det summerade fruktsamhetstalet som centralt mått. Detta visar benägenheten att föda barn ett visst år genom att ställa antalet födda i relation till antalet kvinnor i barnafödande åldrar. Måttet beräknas genom att för varje åldersgrupp räkna fram ett fruktsamhetstal som sedan summeras. Resultatet ger en bild av hur många barn kvinnor skulle få i genomsnitt under hela sitt liv om fruktsamheten förblev densamma som det aktuella året, och fungerar därmed som en temperaturmätare på barnafödandets utveckling.
+
+På andra sidan av ekvationen finns dödsfallen som i hög grad styrs av befolkningens åldersstruktur. När stora födelsekullar successivt når allt högre åldrar ökar antalet dödsfall i samhället, även om varje generation lever längre än den föregående. Den förväntade livslängden kan alltså fortsätta stiga samtidigt som det absoluta antalet dödsfall ökar. Detta beror helt enkelt på att det finns fler personer i de åldrar där dödsrisken är som högst.
+
+## Nuläge och historisk utveckling
+
+Under 2000-talet har Halland haft ett positivt födelsenetto som bidragit med i genomsnitt knappt 400 personer årligen och stått för knappt 14 procent av länets totala befolkningstillväxt. Men utvecklingen har gradvis försämrats och de senaste åren har nettot sjunkit avsevärt. 2023 var det negativt (-141 personer), 2024 marginellt positivt (+63 personer) och 2025 åter negativt (-170 personer). Utvecklingen beror dels på att antalet dödsfall ökat, dels på att födelsetalen sjunker.
+
+Det summerade fruktsamhetstalet har sjunkit från 2,17 barn per kvinna år 2010 till 1,62 år 2025. Även om Hallands nivå fortfarande ligger över riksgenomsnittet på 1,42 är det en historiskt sett mycket låg nivå. Parallellt har medelåldern för förstagångsmödrar ökat från knappt 28 år vid millennieskiftet till drygt 30 år idag. Det är framför allt kvinnor i åldrarna 20-29 år som får färre barn jämfört med tidigare, medan de högsta fruktsamhetstalen nu återfinns i åldersgruppen 30-34 år.
+
+Att antalet dödsfall ökat beror på att allt fler tillhör de äldre åldersgrupperna. Den förväntade medellivslängden fortsätter dock att öka och ligger i Halland på 85,57 år för kvinnor och 82,64 år för män, vilket är de högsta värdena bland Sveriges regioner.
+
+Bland länets kommuner har födelsenettot under 2000-talet lämnat ett positivt bidrag till befolkningsutvecklingen i Falkenberg, Halmstad, Kungsbacka och Varberg, samtidigt som det varit negativt i Hylte och Laholm. Variationerna beror på olikartade åldersstrukturer mellan kommunerna. De senaste åren har födelsenettot försämrats i samtliga av länets kommuner.
+
+## Framskrivningsresultat
+
+Under framskrivningsperioden 2026-2040 förväntas födelsenettot bidra negativt till länets befolkningsutveckling. I genomsnitt beräknas antalet dödsfall överstiga antalet födda med drygt 690 personer årligen, vilket summerat innebär ett negativt bidrag på drygt 10 300 personer till länets befolkningsutveckling fram till 2040.
+
+Fruktsamhetstalet väntas sjunka ytterligare något de närmaste åren för att sedan successivt återhämta sig från och med 2028-2029. Återhämtningen förväntas dock inte återföra nivåerna till 2010-talets höjder utan stabiliseras på 1,78 barn per kvinna år 2040. I absoluta tal innebär detta knappt 2 900 födda per år under framskrivningsperiodens första hälft, för att sedan öka till drygt 3 150 barn årligen resterande period.
+
+Samtidigt ökar antalet dödsfall successivt från drygt 3 200 år 2025 till omkring 4 000 år 2040. Ökningen beror inte på högre dödsrisker utan är en ren ålderseffekt när de stora 40-talskullarna och deras barn når mycket hög ålder.
+
+Samtliga kommuner i Halland förväntas ha ett negativt födelsenetto under perioden, med särskilt stora underskott i Kungsbacka och Varberg.
+
+## Analys
+
+Att födelsenettot vänder från positivt till negativt markerar ett historiskt skifte för Halland. Regionen kan inte längre räkna med naturlig befolkningstillväxt utan blir beroende av inflyttning för att växa. Detta är ingen isolerad utveckling utan speglar en bred trend i hela västvärlden där ekonomiska, sociala och kulturella faktorer har resulterat i ett minskat barnafödande. SCB:s riksframskrivning visar samma mönster: antalet döda beräknas överstiga antalet födda de flesta år under framskrivningsperioden, och under de närmaste fem åren väntas underskottet i riket ligga på i genomsnitt drygt 2 700 personer per år.
+
+Barnafödandet påverkas av en komplex väv av faktorer vilket gör utvecklingen svår att skriva fram med precision. Just nu befinner vi oss i en period präglad av lågkonjunktur och en inbromsad arbetsmarknad, faktorer som historiskt sett haft tydlig påverkan på födelsetalen. Frågan är om barnafödandet kommer att ta fart när konjunkturen vänder, eller om mer grundläggande förändringar i värderingar och livsmönster permanent sänkt benägenheten att skaffa barn. Samspelet mellan konjunkturella och strukturella faktorer gör den framtida utvecklingen särskilt osäker.
+
+Den sammantagna effekten av färre födda och fler döda innebär att Halland måste attrahera ännu fler inflyttare för att upprätthålla befolkningstillväxten. Regionens attraktivitet som bostadsort blir därmed ännu viktigare för den framtida utvecklingen.
+
+# Inrikes flyttningar
+
+:::: results-summary
+#### Huvudresultat {.unlisted}
+
+::: {.result-item .inline}
+[Under framskrivningsperioden 2026-2040 förväntas det inrikes flyttnettot bidra positivt till Hallands befolkningsutveckling med i genomsnitt knappt 950 personer årligen, totalt drygt 14 000 personer.]{.result-context}
+:::
+::::
+
+```{r}
+#| include: false
+# inrikesflyttningar.csv och inflyttkommun.csv genereras i den centrala setup-chunken.
+```
+
+```{ojs}
+//| echo: false
+// Läs in inrikes flyttningsdata
+inrikesflyttdata = FileAttachment("inrikesflyttningar.csv").csv({typed: true})
+
+// Läs in åldersklassdata för flyttningar
+inflyttkommun = FileAttachment("inflyttkommun.csv").csv({typed: true})
+
+// Lista över regioner för flyttningar (utan Riket)
+regioner_flyttningar = ["Hallands län", "Kungsbacka", "Varberg", "Falkenberg", "Halmstad", "Hylte", "Laholm"]
+```
+
+:::::::: plot-wrapper
+::::::: plot-container
+::::: plot-header
+::: plot-title
+Fortsatt positivt inrikes flyttnetto
+:::
+
+::: plot-subtitle
+Antal inrikes in- och utflyttade samt flyttnetto 2000-2040, framskrivningsperiod 2026-2040.
+:::
+
+```{ojs}
+//| echo: false
+viewof selectedRegionFlyttningar = Inputs.select(
+  regioner_flyttningar,
+  {
+    value: "Hallands län", width: 40,
+    label: null,
+  }
+)
+```
+
+```{ojs}
+//| echo: false
+viewof flyttningsvisning = Inputs.radio(
+  ["Flyttningar totalt", "Flyttnetto per åldersgrupp"],
+  {value: "Flyttningar totalt", label: null}
+)
+```
+:::::
+
+```{ojs}
+//| echo: false
+//| classes: plot-chart
+// Beräkna data baserat på visningstyp
+processed_flyttdata = {
+  if (flyttningsvisning === "Flyttningar totalt") {
+    return inrikesflyttdata.filter(d => d.Region === selectedRegionFlyttningar);
+  } else {
+    // Definiera de år du vill visa - alla från 2010
+    const yearsToShow = [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
+
+    // Hämta data för de valda åren
+    const regionData = inflyttkommun.filter(d => 
+      d.Region === selectedRegionFlyttningar && 
+      d.Variabel === "Inrikes flyttningsöverskott" &&
+      yearsToShow.includes(d.År)
+    );
+    
+    // Definiera den korrekta ordningen för åldersgrupper
+    const ageOrder = [
+      "0-4 år", "5-9 år", "10-14 år", "15-19 år", "20-24 år", "25-29 år",
+      "30-34 år", "35-39 år", "40-44 år", "45-49 år", "50-54 år", "55-59 år",
+      "60-64 år", "65-69 år", "70-74 år", "75-79 år", "80-84 år", "85-89 år",
+      "90-94 år", "95-99 år", "100+ år"
+    ];
+    
+    // Bearbeta datan: lägg till ÅlderIndex och konvertera År till sträng
+    const processedData = regionData.map(d => ({
+      Ålder: d.Ålder,
+      ÅlderIndex: ageOrder.indexOf(d.Ålder), // VIKTIGT: Index för x-axeln
+      År: d.År.toString(), // VIKTIGT: Sträng för gruppering
+      Värde: parseFloat(d.Värde),
+      isLatest: d.År === 2025, // Markera om det är senaste året
+      strokeColor: d.År === 2025 ? "#005A4D" : "#999999", // 2025 får mörkgrön färg, resten grå
+      fillColor: d.År === 2025 ? "#005A4D" : "#999999" // 2025 får mörkgrön färg, resten grå
+    })).filter(d => d.ÅlderIndex > -1 && !isNaN(d.Värde)); // Filtrera bort ogiltiga rader
+    
+    console.log("Processed age index data:", processedData);
+    
+    return processedData;
+  }
+}
+
+// Beräkna label offsets för sista årets data om vi visar totala flyttningar
+lastYearData = flyttningsvisning === "Flyttningar totalt" 
+  ? processed_flyttdata.filter(d => d.År === Math.max(...processed_flyttdata.map(d => d.År)))
+  : [];
+
+// Använd dynamisk offset-beräkning
+labelOffsets = flyttningsvisning === "Flyttningar totalt" 
+  ? calculateLabelOffsets(lastYearData, {
+     minDistancePercent: 0.08  // 5% av värdeområdet
+    }) 
+  : new Map();
+
+// Rita graf för inrikes flyttningar
+Plot.plot({
+  width: 700,
+  height: 400,
+  x: {
+    label: null,
+    grid: false,
+    line: "#005A4D",
+    tickSize: 6,
+    ...(flyttningsvisning === "Flyttningar totalt" && {
+      tickFormat: d => d.toString()
+    }),
+    ...(flyttningsvisning === "Flyttnetto per åldersgrupp" && {
+      tickFormat: (d) => {
+        const ageOrder = [
+          "0-4 år", "5-9 år", "10-14 år", "15-19 år", "20-24 år", "25-29 år",
+          "30-34 år", "35-39 år", "40-44 år", "45-49 år", "50-54 år", "55-59 år",
+          "60-64 år", "65-69 år", "70-74 år", "75-79 år", "80-84 år", "85-89 år",
+          "90-94 år", "95-99 år", "100+ år"
+        ];
+        return ageOrder[d] || "";
+      },
+      tickRotate: -45
+    })
+  },
+  y: {
+    label: "Antal personer",
+    grid: "#797d7f",
+    line: "#005A4D", 
+    nice: true,
+    tickSize: 6,
+    tickFormat: d => formatNumber(d),
+    labelOffset: 0,
+    labelArrow: "none",
+    textAnchor: "end"
+  },
+  color: {
+    legend: false, // Ingen legend
+    ...(flyttningsvisning === "Flyttningar totalt" && {
+      domain: ["Inrikes inflyttade", "Inrikes utflyttade", "Inrikes flyttnetto"],
+      range: ["#005A4D", "#B33D4A", "#004C70"]
+    }),
+    ...(flyttningsvisning === "Flyttnetto per åldersgrupp" && {
+      scheme: "Tableau10"
+    })
+  },
+  marginLeft: 70,
+  marginRight: 120,
+  marginBottom: flyttningsvisning === "Flyttnetto per åldersgrupp" ? 60 : 40,
+  style: {
+    fontSize: "12.5px",
+    color: "#002b1f"
+  },
+  marks: [
+    // Olika grafer beroende på visningstyp
+    ...(flyttningsvisning === "Flyttningar totalt" ? [
+      // Vertikal referenslinje som följer musen
+      Plot.ruleX(processed_flyttdata, Plot.pointerX({
+        x: "År", 
+        stroke: "#999", 
+        strokeWidth: 1, 
+        strokeDasharray: "3,3"
+      })),
+      
+      // Nolllinje
+      Plot.ruleY([0], {stroke: "#005A4D", strokeWidth: 1}),
+      
+      // Framskrivningsmarkering (ljus bakgrund för framskrivningsår)
+      Plot.rect([{x1: 2025.5, x2: 2040}], {
+        x1: "x1",
+        x2: "x2", 
+        fill: "#E5F2E5",
+        fillOpacity: 0.3
+      }),
+      
+      // Text för framskrivningsperiod
+      Plot.text(["Framskrivningsperiod"], {
+        x: 2032.25,
+        frameAnchor: "top",
+        dy: -10,
+        textAnchor: "middle",
+        fill: "#555",
+        fontSize: 13,
+        fontStyle: "italic"
+      }),
+      
+      // Linjer för varje variabel
+      Plot.line(processed_flyttdata, {
+        x: "År",
+        y: "Värde", 
+        stroke: "Variabel",
+        strokeWidth: 3
+      }),
+      
+      // Punkter för alla år utom sista
+      Plot.dot(processed_flyttdata.filter(d => d.År < Math.max(...processed_flyttdata.map(d => d.År))), {
+        x: "År",
+        y: "Värde",
+        fill: "Variabel",
+        r: 3.5,
+        fillOpacity: 0.6
+      }),
+      
+      // Större punkter för sista året
+      Plot.dot(processed_flyttdata.filter(d => d.År === Math.max(...processed_flyttdata.map(d => d.År))), {
+        x: "År", 
+        y: "Värde",
+        fill: "Variabel",
+        r: 4.5
+      }),
+      
+      // Linjer från punkter till etiketter om de flyttats
+      Plot.link(lastYearData.filter(d => Math.abs(labelOffsets.get(d.Variabel) || 0) > 1), {
+        x1: "År",
+        y1: "Värde",
+        x2: "År",
+        y2: d => d.Värde + (labelOffsets.get(d.Variabel) || 0),
+        stroke: "Variabel",
+        strokeWidth: 1,
+        strokeOpacity: 0.3,
+        strokeDasharray: "2,2",
+        dx1: 6, // Start från punktens kant
+        dx2: 6  // Slut vid etikettens kant
+      }),
+      
+      // Etiketter för sista värdet med dynamisk positionering
+      Plot.text(lastYearData, {
+        x: "År",
+        y: d => d.Värde + (labelOffsets.get(d.Variabel) || 0), // Justera y-position baserat på beräknade offsets
+        text: "Variabel",
+        fill: "Variabel",
+        dx: 8,
+        textAnchor: "start",
+        fontSize: 12.5,
+        fontWeight: "600"
+      }),
+      
+      // Tooltip
+      Plot.tip(processed_flyttdata, Plot.pointerX({
+        x: "År",
+        y: "Värde",
+        title: d => `${d.Variabel}\nÅr: ${d.År}\nAntal: ${formatNumber(d.Värde)}`,
+        fontSize: 14,
+        lineHeight: 1.5,
+        frameAnchor: "bottom"
+      }))
+    ] : [
+      // Grafer för åldersklassdata
+      // Nolllinje
+      Plot.ruleY([0], {stroke: "#005A4D", strokeWidth: 1}),
+      
+      // Linjer för alla år (både grå och 2025)
+      Plot.line(processed_flyttdata, {
+        x: "ÅlderIndex", // Använd numeriskt index för position
+        y: "Värde",
+        stroke: d => d.strokeColor, // Använd färg från data
+        strokeWidth: d => d.isLatest ? 3 : 1, // Tjockare linje för 2025, tunnare för resten
+        strokeOpacity: d => d.isLatest ? 1 : 0.4, // Genomskinliga gråa linjer
+        z: "År" // Gruppera på år för separata linjer
+      }),
+      
+      // Punkter endast för 2025 (ritas sist så de hamnar överst)
+      Plot.dot(processed_flyttdata.filter(d => d.isLatest), {
+        x: "ÅlderIndex",
+        y: "Värde",
+        fill: d => d.fillColor,
+        r: 3.5,
+        stroke: d => d.strokeColor,
+        strokeWidth: 1
+      }),
+      
+      // Annotation som förklarar att grön linje är 2025
+      Plot.text(["Grön linje: 2025"], {
+        x: 15, // Placera i mitten av grafen
+        y: Math.max(...processed_flyttdata.map(d => d.Värde)) * 0.8, // Nära toppen
+        text: d => d,
+        fill: "#005A4D",
+        fontSize: 11,
+        fontWeight: "600",
+        textAnchor: "middle"
+      }),
+      
+      // Tooltip som använder index
+      Plot.tip(processed_flyttdata, Plot.pointer({
+        x: "ÅlderIndex", // Använd index för position
+        y: "Värde",
+        title: d => `År: ${d.År}\nÅldersgrupp: ${d.Ålder}\nFlyttnetto: ${formatNumber(d.Värde)}`,
+        fontSize: 14,
+        lineHeight: 1.5
+      }))
+    ])
+  ]
+})
+```
+
+::: plot-footer
+*Källa: Region Halland och SCB*
+:::
+:::::::
+::::::::
+
+## Bakgrund
+
+Inrikes flyttningar handlar om hur människor omfördelar sig inom landet och är avgörande för regionala utvecklingsmönster. När en region har ett positivt inrikes flyttnetto innebär det att fler flyttar in från andra delar av Sverige än vad som flyttar ut. Detta påverkar inte bara befolkningens storlek utan också dess sammansättning, eftersom olika åldersgrupper har olika flyttmönster och drivkrafter.
+
+Var människor väljer att bosätta sig styrs av en kombination av faktorer där arbetsmarknad, bostadstillgång, utbildningsmöjligheter och livsmiljöer spelar avgörande roller. Under de senaste decennierna har storstadsregionerna och deras grannregioner, en kategori som Halland tillhör, haft den största inflyttningen. Framgångsfaktorn har varit kombinationen av goda pendlingsmöjligheter till stora och växande arbetsmarknader samtidigt som man kunnat erbjuda attraktiva boendemiljöer och tillgång till ett stort utbud av kultur, nöje och service.
+
+Flyttbenägenheten varierar kraftigt genom livet. Mest flyttintensiva är personer mellan 20-29 år som lämnar uppväxtorten för högskolestudier eller tidiga karriärmöjligheter. Ofta går flyttningarna i detta skede till universitetsorter och storstäder. Åldersgruppen 30-44 år, som fortfarande är relativt flyttbenägen, söker sig i högre grad till pendlingskommuner där de kan hitta större bostäder samtidigt som man har god tillgång till stora arbetsmarknader. En del personer i detta skede väljer istället att återvända till sina uppväxtorter. I takt med stigande ålder avtar sedan flyttbenägenheten markant, och bland de äldre som ändå flyttar söker sig många till kust- och turistkommuner med attraktiva naturmiljöer.
+
+## Nuläge och historisk utveckling
+
+Halland har under lång tid haft ett positivt inrikes flyttnetto och etablerat sig som en av landets mest attraktiva inflyttningsregioner. Under 2000-talet har inflyttningen från andra regioner stått för drygt 43 procent av länets totala befolkningstillväxt. Närheten till växande storstadsregioner i kombination med egen stark arbetsmarknad, attraktiva kustmiljöer och goda kommunikationer har gjort Halland till en vinnare i detta sammanhang.
+
+Flyttmönstren visar tydliga åldersmässiga skillnader. Samtliga åldersgrupper utom 15-29 år bidrar till regionens positiva flyttnetto. Det är framför allt barnfamiljer (här definierat som personer i åldrarna 0-14 år och 30-49 år) som bidrar till länets positiva netto. Under perioden 2010-2025 stod dessa grupper för nära 90 procent av länets positiva inflyttningsnetto, varav en stor del av inflyttningen kom från Göteborgsregionen. Däremot har regionen ett negativt flyttnetto i åldern 20-29 år. Detta beror i hög utsträckning på att det är fler som flyttar ut från Halland för högskolestudier än som flyttar in för att studera vid Högskolan i Halmstad.
+
+De senaste åren har regionens inrikes flyttnetto sjunkit tillbaka från historiskt höga nivåer. Från i snitt knappt 1 200 personer årligen under 2000-talet har nettot legat på mellan 530 och 870 personer 2023-2025. Nedgången gäller främst ungdomar i studieålder (20-24 år) och personer i familjebildande ålder (30-44 år), vilket också påverkat flyttnettot bland barn negativt. Utvecklingen hänger sannolikt samman med att flyttningar över länsgräns generellt minskat under lågkonjunkturen i kombination med en trögare bostadsmarknad som försvårat flyttkedjorna. På sikt är det sannolikt att det minskade barnafödandet också kan få en temporär effekt på inflyttningen till regionen.
+
+Under 2000-talet har samtliga av länets kommuner förutom Hylte haft ett positivt inrikes flyttnetto. I faktiska tal har de norra delarna haft det högsta nettot, i synnerhet Kungsbacka (i snitt knappt 500 personer årligen) och Varberg (drygt 400 årligen). De senaste åren har dock Kungsbacka, som haft en mycket hög inflyttning över tid, haft ett betydligt svagare flyttnetto än tidigare. I de södra delarna är det Halmstad som över tid stått för den största ökningen, men kommunen har haft ett relativt svagt flyttnetto senare år samtidigt som Laholm haft ett relativt högt.
+
+## Framskrivningsresultat
+
+Under framskrivningsperioden 2026-2040 förväntas det inrikes flyttnettot bidra positivt till Hallands befolkningsutveckling med i genomsnitt knappt 950 personer årligen, totalt drygt 14 000 personer. Detta gör inrikes flyttningar till den komponent som bidrar mest till länets befolkningstillväxt under perioden. Att nivåerna ligger något lägre än under topparna under 2000-talet beror dels på att den minskade inflyttningstendensen bland barnfamiljer senare år får visst genomslag i framskrivningen, dels på hur många som förväntas befinna sig i olika åldersgrupper i riket som helhet under framskrivningsperioden.
+
+Framskrivningen utgår från att konjunkturen förbättras och att flyttaktiviteten därmed ökar något jämfört med de senaste årens låga nivåer. Flyttmönstren förväntas i huvudsak följa historiska trender där Halland fortsätter attrahera barnfamiljer, personer i övre medelåldern och äldre, medan ungdomar lämnar för studier och tidiga karriärår.
+
+Bland kommunerna förväntas alla utom Hylte ha ett positivt inrikes flyttnetto under framskrivningsperioden. Högst netto har Varberg (i snitt knappt 480 personer årligen), följt av Falkenberg (drygt 220). Den största förändringen jämfört med tidigare är att Kungsbacka beräknas få ett betydligt lägre netto än tidigare (knappt 140 personer årligen). Framskrivningen baseras på ett viktat snitt av de senaste årens utveckling där åren närmast i tiden väger tyngst, och eftersom kommunens flyttnetto sjunkit kraftigt jämfört med 2010-talet får denna svagare nivå stort genomslag. Värt att notera är dock att utvecklingen under 2025 åter vände uppåt: flyttnettot steg till knappt 480 personer, en nivå som inte uppmätts sedan 2010-talet. Detta enskilda år får ett begränsat genomslag i framskrivningen, som inte heller bygger på antaganden om planerad nybyggnation eller andra lokala satsningar. Skulle 2025 års återhämtning hålla i sig kommande år, eller bostadsbyggandet i kommunen öka, kommer framskrivningsresultatet att behöva revideras uppåt vid kommande uppdateringar. I de södra delarna visar framskrivningen ett förhållandevis lågt inflyttningsnetto till Halmstad (knappt 70 personer årligen), vilket beror på hur ålderssammansättningen förväntas förändras på lokal och nationell nivå under perioden men också på att kommunen haft ett relativt svagt netto de senaste åren.
+
+## Analys
+
+Halland är en av Sveriges mest attraktiva boenderegioner och inflyttningarna från andra regioner kommer framöver att ha en större betydelse för att regionen ska växa. Med ett negativt födelsenetto och ett lägre invandringsnetto blir denna komponent central för den samlade befolkningsutvecklingen. För att locka invånare från andra regioner behöver Halland stärka och utveckla sina komparativa konkurrensfördelar. Vad dessa fördelar är varierar mellan olika åldersgrupper men gemensamt är att tillgång till försörjning i form av studier eller arbete samt bostäder utgör grundläggande attraktivitetsfaktorer.
+
+De senaste åren har en viss inbromsning av inflyttningen till länet skett och flyttningsnettot sjunkit tillbaka något. Därför finns det anledning att framöver mer djupgående analysera vad det är som föranlett nedgången och hur man kan arbeta för att motverka denna tendens. Sannolikt har lågkonjunkturen en stor påverkan: allmänna kostnadsökningar för hushållen, ökade räntor och en viss inbromsning på både bostads- och arbetsmarknaden dämpar inflyttningen till regionen som har förhållandevis höga bostadspriser. En annan tänkbar påverkansfaktor är att det minskade barnafödandet till viss del bidragit till att färre flyttat till regionen som både i nutid och historiskt sett varit särskilt attraktiv för barnfamiljer.
+
+Komponenten inrikes flyttningar är den som kommuner och regioner har störst möjlighet att påverka genom egna beslut och åtgärder. Bostadsbyggande, kollektivtrafik, arbetsmarknad och näringsliv samt offentlig service är alla faktorer som påverkar en plats attraktivitet och som kommunala och regionala aktörer har, i varierande utsträckning, rådighet över. Framskrivningsresultaten ska därför ses som just en framskrivning av dagens förhållanden. Ett aktivt arbete för ökad attraktivitet kan mycket väl leda till högre inflyttning än vad framskrivningen visar och därmed stärka regionens utveckling.
+
+# Utrikes flyttningar
+
+:::: results-summary
+#### Huvudresultat {.unlisted}
+
+::: {.result-item .inline}
+[Under framskrivningsperioden 2026-2040 förväntas det utrikes flyttnettot fortsätta bidra positivt till Hallands befolkningsutveckling men på betydligt lägre nivåer än tidigare.]{.result-context}
+:::
+::::
+
+```{r}
+#| include: false
+# utrikesflyttningar.csv genereras i den centrala setup-chunken.
+```
+
+```{ojs}
+//| echo: false
+// Läs in utrikes flyttningsdata
+utrikesflyttdata = FileAttachment("utrikesflyttningar.csv").csv({typed: true})
+
+// Lista över regioner för utrikes flyttningar (utan Riket)
+regioner_utrikes = ["Hallands län", "Riket", "Kungsbacka", "Varberg", "Falkenberg", "Halmstad", "Hylte", "Laholm"]
+```
+
+:::::::: plot-wrapper
+::::::: plot-container
+::::: plot-header
+::: plot-title
+Positivt men lägre utrikes flyttnetto
+:::
+
+::: plot-subtitle
+Antal invandrade, utvandrade och utrikes flyttnetto 2000-2040, framskrivningsperiod 2026-2040.
+:::
+
+```{ojs}
+//| echo: false
+viewof selectedRegionUtrikes = Inputs.select(
+  regioner_utrikes,
+  {
+    value: "Hallands län", width: 40,
+    label: null,
+  }
+)
+```
+:::::
+
+```{ojs}
+//| echo: false
+//| classes: plot-chart
+// Filtrera data för vald region
+processed_utrikesdata = utrikesflyttdata.filter(d => d.Region === selectedRegionUtrikes)
+
+// Beräkna label offsets för sista årets data
+lastYearUtrikesData = processed_utrikesdata.filter(d => d.År === Math.max(...processed_utrikesdata.map(d => d.År)))
+
+// Använd dynamisk offset-beräkning
+labelOffsetsUtrikes = calculateLabelOffsets(lastYearUtrikesData, {
+  minDistancePercent: 0.08  // 8% av värdeområdet
+})
+
+// Rita graf för utrikes flyttningar
+Plot.plot({
+  width: 700,
+  height: 400,
+  x: {
+    label: null,
+    tickFormat: d => d.toString(),
+    grid: false,
+    line: "#005A4D",
+    tickSize: 6
+  },
+  y: {
+    label: "Antal personer",
+    grid: "#797d7f",
+    line: "#005A4D", 
+    nice: true,
+    tickSize: 6,
+    tickFormat: d => formatNumber(d),
+    labelOffset: 0,
+    labelArrow: "none",
+    textAnchor: "end"
+  },
+  color: {
+    legend: false,
+    domain: ["Invandring", "Utvandring", "Utrikes flyttnetto"],
+    range: ["#005A4D", "#B33D4A", "#004C70"]
+  },
+  marginLeft: 70,
+  marginRight: 120,
+  style: {
+    fontSize: "12.5px",
+    color: "#002b1f"
+  },
+  marks: [
+    // Vertikal referenslinje som följer musen
+    Plot.ruleX(processed_utrikesdata, Plot.pointerX({
+      x: "År", 
+      stroke: "#999", 
+      strokeWidth: 1, 
+      strokeDasharray: "3,3"
+    })),
+    
+    // Nolllinje
+    Plot.ruleY([0], {stroke: "#005A4D", strokeWidth: 1}),
+    
+    // Framskrivningsmarkering (ljus bakgrund för framskrivningsår)
+    Plot.rect([{x1: 2025.5, x2: 2040}], {
+      x1: "x1",
+      x2: "x2", 
+      fill: "#E5F2E5",
+      fillOpacity: 0.3
+    }),
+    
+    // Text för framskrivningsperiod
+    Plot.text(["Framskrivningsperiod"], {
+      x: 2032.25,
+      frameAnchor: "top",
+      dy: -10,
+      textAnchor: "middle",
+      fill: "#555",
+      fontSize: 13,
+      fontStyle: "italic"
+    }),
+    
+    // Linjer för varje variabel
+    Plot.line(processed_utrikesdata, {
+      x: "År",
+      y: "Värde", 
+      stroke: "Variabel",
+      strokeWidth: 3
+    }),
+    
+    // Punkter för alla år utom sista
+    Plot.dot(processed_utrikesdata.filter(d => d.År < Math.max(...processed_utrikesdata.map(d => d.År))), {
+      x: "År",
+      y: "Värde",
+      fill: "Variabel",
+      r: 3.5,
+      fillOpacity: 0.6
+    }),
+    
+    // Större punkter för sista året
+    Plot.dot(processed_utrikesdata.filter(d => d.År === Math.max(...processed_utrikesdata.map(d => d.År))), {
+      x: "År", 
+      y: "Värde",
+      fill: "Variabel",
+      r: 4.5
+    }),
+    
+    // Linjer från punkter till etiketter om de flyttats
+    Plot.link(lastYearUtrikesData.filter(d => Math.abs(labelOffsetsUtrikes.get(d.Variabel) || 0) > 1), {
+      x1: "År",
+      y1: "Värde",
+      x2: "År",
+      y2: d => d.Värde + (labelOffsetsUtrikes.get(d.Variabel) || 0),
+      stroke: "Variabel",
+      strokeWidth: 1,
+      strokeOpacity: 0.3,
+      strokeDasharray: "2,2",
+      dx1: 6,
+      dx2: 6
+    }),
+    
+    // Etiketter för sista värdet med dynamisk positionering
+    Plot.text(lastYearUtrikesData, {
+      x: "År",
+      y: d => d.Värde + (labelOffsetsUtrikes.get(d.Variabel) || 0),
+      text: "Variabel",
+      fill: "Variabel",
+      dx: 8,
+      textAnchor: "start",
+      fontSize: 12.5,
+      fontWeight: "600"
+    }),
+    
+    // Tooltip
+    Plot.tip(processed_utrikesdata, Plot.pointerX({
+      x: "År",
+      y: "Värde",
+      title: d => `${d.Variabel}\nÅr: ${d.År}\nAntal: ${formatNumber(d.Värde)}`,
+      fontSize: 14,
+      lineHeight: 1.5,
+      frameAnchor: "bottom"
+    }))
+  ]
+})
+```
+
+::: plot-footer
+*Källa: Region Halland och SCB*
+:::
+:::::::
+::::::::
+
+## Bakgrund
+
+Utrikes flyttningar, det vill säga invandring och utvandring, utgör en betydande komponent i Sveriges och regionernas befolkningsutveckling. Under de senaste decennierna har invandringen till Sverige bidragit till både befolkningstillväxt och en yngre åldersstruktur.
+
+Flyttningar över landsgränser drivs av en mängd olika faktorer. Internationella konflikter, förföljelse och brott mot mänskliga rättigheter tvingar människor att fly som flyktingar från sina hemländer. Ekonomiska faktorer driver arbetskraftsmigration; både när människor från länder med hög arbetslöshet och låga löner söker sig till starkare ekonomier, och när högkvalificerad arbetskraft rör sig mellan länder för karriärmöjligheter. Därutöver sker migration för studier, familjeåterförening och kärleksrelationer över gränser.
+
+För Sveriges del påverkas de utrikes flyttningarna av både globala drivkrafter och nationella faktorer som migrationspolitik, arbetsmarknadens behov och regelverk. När människor väl flyttat till Sverige styrs bosättningsmönstren av var det finns etablerade nätverk, arbetstillfällen och tillgängliga bostäder.
+
+## Nuläge och historisk utveckling
+
+Under perioden 2000-2025 hade Halland ett positivt utrikes flyttnetto på i genomsnitt drygt 1 200 personer årligen, vilket motsvarade drygt 44 procent av länets totala befolkningstillväxt. Utvecklingen har dock varit ojämn över tid. De högsta nivåerna nåddes under perioden 2014-2018 då Sverige hade en rekordhög invandring till följd av flyktingkrisen. Under dessa år låg Hallands årliga netto på drygt 2 500 personer, vilket bidrog till att länets totala befolkningstillväxt var särskilt stark under denna period.
+
+Sedan pandemin har utvecklingen vänt och de senaste tre åren har nettot legat på i genomsnitt knappt 460 personer årligen. Nedgången beror på en kombination av minskad invandring och ökad utvandring. Invandringen har minskat från de exceptionellt höga nivåerna 2014-2019 samtidigt som utvandringen ökat. Den högre utvandringen förklaras delvis av att Skatteverket gjort särskilda insatser för att avregistrera personer som inte längre bor i Sverige men fortfarande är folkbokförda här. Det minskade utrikes flyttnettot är en av huvudförklaringarna till att länets samlade befolkningsökning bromsat in på senare år.
+
+Samtliga kommuner i länet har haft positiva utrikes flyttnetton under 2000-talet och invandringen har varit betydande för befolkningstillväxten i varje kommun. På senare år har dock detta netto minskat i alla länets kommuner.
+
+## Framskrivningsresultat
+
+Under framskrivningsperioden 2026-2040 förväntas det utrikes flyttnettot fortsätta bidra positivt till Hallands befolkningsutveckling men på betydligt lägre nivåer än tidigare. Framskrivningen visar ett årligt genomsnitt om drygt 660 personer i nettoinflyttning, vilket totalt ger knappt 10 000 personer under hela perioden. Fortsatt förväntas således invandringen till regionen ha stor betydelse för den samlade befolkningsutvecklingen och tillsammans med det inrikes flyttnettot stå för hela ökningen.
+
+Invandringen till länet beräknas ligga på i genomsnitt 2 000 personer årligen samtidigt som utvandringen väntas stabiliseras kring drygt 1 300 personer om året, en relativt hög nivå historiskt sett men lägre än de senaste årens utfall. På kommunnivå visar framskrivningen att alla kommuner fortsatt kommer ha positiva utrikes flyttnetton, men på lägre nivåer än tidigare. Halmstad har högst genomsnittligt netto (drygt 300 personer årligen), följt av Kungsbacka och Varberg (drygt 100 personer vardera).
+
+En särskild faktor som påverkat invandringen senare år är kriget i Ukraina. Under 2022 kom många ukrainska flyktingar till Sverige med tillfälligt skydd enligt massflyktsdirektivet. Sedan juni 2024 har denna grupp haft möjlighet att ansöka om att bli folkbokförda i Sverige. Under 2024 folkbokfördes närmare 30 000 ukrainare i riket, ett antal som under 2025 sjönk till knappt 7 000. I Halland innebar detta att invandringen 2025 åter sjönk tillbaka från 2 465 till 1 859 personer.
+
+Här gör SCB:s riksframskrivning och Region Hallands framskrivning olika antaganden om den fortsatta utvecklingen. SCB utgår från att massflyktsdirektivet upphör den 4 mars 2027 och att de som kommit som flyktingar då lämnar Sverige, vilket leder till en utvandring i riket på drygt 106 000 personer detta enskilda år och ett tillfälligt negativt utrikes flyttnetto om cirka 25 000 personer. Region Halland utgår istället från ett alternativt antagande där direktivet förlängs och flyktingarna stannar kvar. Halland får därför inte den utvandringstopp 2027 som ingår i riksframskrivningen, utan utvandringen ligger jämnt över hela framskrivningsperioden.
+
+För perioden 2028-2029 antar SCB en lägre invandring även i riket som helhet. Detta motiveras med att invandringen från Norden och EU minskat mer än väntat och att asyl-, anhörig- och arbetskraftsinvandringen ligger på lägre nivåer än vad som antogs i tidigare framskrivningar. Från 2030 och framåt stabiliseras invandringen i riket på knappt 100 000 personer årligen och invandringsöverskottet på drygt 30 000 personer årligen, vilket också är den nivå som ligger till grund för Hallandsframskrivningens senare år.
+
+## Analys
+
+Det minskade utrikes flyttnettot utgör en betydande förändring för Hallands framtida befolkningsutveckling. Från ett historiskt genomsnitt på drygt 1 200 personer årligen sjunker framskrivningen till knappt 670 personer. Särskilt dramatisk blir förändringen jämfört med toppåren 2014-2018, då nettot låg på över 2 500 personer årligen. Denna utveckling är ingen isolerad företeelse för Halland utan i Sverige som helhet förväntas invandringsnettot halveras från drygt 52 000 personer per år under 2000-2024 till knappt 25 000 personer under framskrivningsperioden.
+
+Att invandringen till riket bedöms bli lägre än i tidigare framskrivningar har flera orsaker: minskad invandring från Norden och EU, lägre asyl-, anhörig- och arbetskraftsinvandring samt en stramare migrationspolitik. Migrationsantagandena är samtidigt förknippade med stor osäkerhet eftersom de påverkas av regelverk, världsläge och hur länge tillfälliga skyddsformer som massflyktsdirektivet förlängs. Hallandsframskrivningens antagande om att direktivet förlängs innebär att utvecklingen i länet ligger jämnare över tid än rikets, men resultatet kan behöva revideras om antagandet inte håller.
+
+Nedgången får konsekvenser för mer än bara befolkningens storlek. Majoriteten av de som invandrat har varit i arbetsför ålder och utgjort en betydande del av arbetskraftstillväxten i länet. Med ett kraftigt minskat invandringsnetto försvagas detta tillskott av personer i yrkesverksam ålder, vilket förstärker de demografiska utmaningar som redan finns med en åldrande befolkning och låga födelsetal.

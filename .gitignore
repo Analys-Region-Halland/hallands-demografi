@@ -1,0 +1,29 @@
+# R
+.Rhistory
+.RData
+.Rproj.user/
+.Renviron
+*.Rproj
+
+# Quarto-output (renderas vid publish)
+_book/
+_site/
+_output/
+_publish/
+.quarto/
+*_files/
+observable-rapport.html
+
+# Node
+node_modules/
+package-lock.json
+
+# SVG-export (genereras)
+svg-export/
+
+# OS / temp
+.DS_Store
+Thumbs.db
+*.log
+temp/
+_tmp_*

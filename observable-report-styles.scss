@@ -1,0 +1,893 @@
+// ==========================================================================
+// Observable Report SCSS - Kombinerad stil för Quarto-rapport med Observable Plot
+// Baserad på rh_style.scss (rapportstil) och plot-styles.css (Observable Plot)
+// Version: 1.0
+// ==========================================================================
+
+// --------------------------------------------------------------------------
+// Steg 1: Importera Nödvändiga Typsnitt
+// --------------------------------------------------------------------------
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap'); // Poppins Bold (700)
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap'); // IBM Plex Sans Regular, Medium, SemiBold
+
+/*-- scss:defaults --*/
+
+// --------------------------------------------------------------------------
+// Steg 2: Definiera Färgpalett
+// --------------------------------------------------------------------------
+
+// Gröna nyanser
+$green-g1: #004232; // Mörkaste Grön (Primär/Rubriker)
+$green-g2: #20AC6C; // Mellangrön (Accenter/Hover)
+$green-g3: #82CD9E;
+$green-g4: #D8E69C;
+$green-g5: #E5F2E5; // Ljusgrön bakgrund
+
+// Blå nyanser
+$blue-b1: #00495D; // Mörk Blå
+$blue-b2: #28B2C5;
+$blue-b3: #A3D8E7;
+$blue-b4: #E6F4F7; // Alternativ ljusblå bakgrund
+
+// Komplement & Neutrala
+$comp-k1: #ED6A55;
+$comp-k2: #F29385;
+$comp-k3: #FDC75F;
+$comp-k4: #FDE5DE;
+$comp-k5: #F8EEDC;
+$comp-k6: #FFFFDE;
+$comp-k7: #F6F5F4; // Tidigare bakgrund (nästan vit)
+
+// Neutrala
+$black: #000000;
+$gray-dark: #000000; // Primär textfärg
+$gray-medium: #adb5bd;
+$gray-light: #dee2e6;
+$white: #FFFFFF;
+
+// --------------------------------------------------------------------------
+// Steg 3: Semantisk Mappning av Färger
+// --------------------------------------------------------------------------
+
+$primary:       $green-g1;
+$secondary:     $green-g2;
+$success:       $green-g2;
+$info:          $blue-b2;
+$warning:       $comp-k3;
+$danger:        $comp-k1;
+$light:         $comp-k7;
+$dark:          $blue-b1;
+
+// Bakgrunds- och textfärger
+$body-bg:       $green-g5;
+$body-color:    $gray-dark;
+$body-secondary: scale-color($green-g1, $lightness: 0%);
+$headings-color:$primary;
+$link-color:    $primary;
+$link-hover-color: $secondary;
+
+$bg-accent-color: $white;
+$border-color:  $gray-medium;
+$border-color-translucent: rgba($black, 0.1);
+
+// --------------------------------------------------------------------------
+// Steg 4: Typsnittsinställningar
+// --------------------------------------------------------------------------
+
+$font-family-sans-serif:      'IBM Plex Sans', sans-serif;
+$font-family-base:            $font-family-sans-serif;
+$headings-font-family:        'Poppins', sans-serif;
+$headings-font-weight:        700;
+$font-weight-base:            400;
+$font-size-base:              1rem;
+$line-height-base:            1.7;
+$paragraph-margin-bottom:     1.25rem;
+
+// Rubrikstorlekar
+$h1-font-size:                $font-size-base * 2.8;
+$h2-font-size:                $font-size-base * 2.2;
+$h3-font-size:                $font-size-base * 1.9;
+$h4-font-size:                $font-size-base * 1.6;
+$h5-font-size:                $font-size-base * 1.35;
+$h6-font-size:                $font-size-base * 1.1;
+
+// --------------------------------------------------------------------------
+// Steg 5: Layout & Globala Inställningar
+// --------------------------------------------------------------------------
+
+$focus-ring-width:      .2rem;
+$focus-ring-opacity:    .5;
+$focus-ring-color:      rgba($secondary, $focus-ring-opacity);
+
+/*-- scss:rules --*/
+
+// --------------------------------------------------------------------------
+// Steg 6: Grundläggande CSS-regler
+// --------------------------------------------------------------------------
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+// Rubrikspatiering
+h1, .h1 {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+h2, .h2 {
+  margin-top: 2.25rem;
+  margin-bottom: 0.85rem;
+}
+h3, .h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+h4, .h4 {
+  margin-top: 1.75rem;
+  margin-bottom: 0.6rem;
+}
+h5, .h5 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+h6, .h6 {
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+// Fast maxbredd för löptext (600px) - vänsterjusterad
+.quarto-body-content > .col-body {
+  max-width: 100% !important; // Låt col-body vara full bredd
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  float: none !important;
+}
+
+// Begränsa själva textinnehållet till 600px
+.quarto-body-content > .col-body > p,
+.quarto-body-content > .col-body > h1,
+.quarto-body-content > .col-body > h2,
+.quarto-body-content > .col-body > h3,
+.quarto-body-content > .col-body > h4,
+.quarto-body-content > .col-body > h5,
+.quarto-body-content > .col-body > h6,
+.quarto-body-content > .col-body > ul,
+.quarto-body-content > .col-body > ol,
+.quarto-body-content > .col-body > blockquote {
+  max-width: 600px !important;
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+
+// Anpassning för centrering på större skärmar
+@media (min-width: 992px) {
+  .body-content {
+     display: flex;
+     justify-content: center;
+  }
+}
+
+// Säkerställ att bredare element skalar korrekt
+.quarto-body-content > .col-body > figure,
+.quarto-body-content > .col-body > .table-responsive,
+.quarto-body-content > .col-body > .quarto-figure,
+.quarto-body-content > .col-body > div[class*="cell-output"] pre,
+.quarto-body-content > .col-body > p > img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+// Textmarginaler
+p {
+  margin-bottom: $paragraph-margin-bottom;
+  max-width: 600px !important;
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+
+ul, ol {
+  margin-bottom: $paragraph-margin-bottom;
+  padding-left: 1.8rem;
+}
+
+li {
+  margin-bottom: 0.6rem;
+}
+
+// Kodblock
+pre {
+  font-family: monospace;
+  background-color: $bg-accent-color;
+  border: 1px solid $gray-light;
+  border-radius: 4px;
+  padding: 1em 1.2em;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin-bottom: $paragraph-margin-bottom;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+pre > code {
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  white-space: inherit;
+  word-wrap: inherit;
+  font-size: 0.95em;
+  line-height: 1.6;
+}
+
+// Blockquotes
+blockquote {
+  border-left: 4px solid $secondary;
+  padding-left: 1.5rem;
+  margin-left: 0;
+  margin-bottom: $paragraph-margin-bottom;
+  font-style: italic;
+  color: scale-color($body-color, $lightness: 15%);
+  font-size: 1.05rem;
+}
+
+// --------------------------------------------------------------------------
+// Title Banner (Quarto specifikt)
+// --------------------------------------------------------------------------
+.quarto-title-banner {
+  padding: 2rem 1.5rem;
+  padding-bottom: 3rem;
+  background-color: $green-g1 !important;
+  color: $white;
+  background-image: url('logo_vit.svg');
+  background-repeat: no-repeat;
+  background-position: center top 1.5rem;
+  background-size: 200px auto;
+}
+
+.quarto-title .title,
+.quarto-title h1.title {
+  margin-top: 5.5rem;
+  font-size: 32pt;
+  font-weight: $headings-font-weight;
+  font-family: $headings-font-family;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+  color: inherit;
+}
+
+.quarto-title .subtitle,
+.quarto-title p.subtitle.lead {
+  font-style: italic;
+  font-size: 1.2rem;
+  opacity: 0.9;
+  color: inherit;
+  margin-top: 0;
+  margin-bottom: 2.5rem;
+}
+
+// --------------------------------------------------------------------------
+// Observable Plot Wrapper Styles
+// --------------------------------------------------------------------------
+
+// Begränsa vanlig text till max 600px och vänsterjustera
+.content > *:not(.plot-wrapper) {
+  max-width: 600px;
+  margin-left: 0;
+  margin-right: auto;
+}
+
+// Säkerställ att alla textelement är vänsterjusterade
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  text-align: left;
+  margin-left: 0;
+  margin-right: auto;
+}
+
+// Säkerställ att vanlig text i huvudinnehållet är vänsterjusterad
+.quarto-body-content {
+  text-align: left;
+}
+
+// Wrapper för hela plot-området - screen-inset-right funktionalitet
+.plot-wrapper {
+  width: 100%;
+  margin: 1.5rem 0;
+  display: flex;
+  justify-content: flex-start; // Börja från vänster
+  
+  // Screen-inset-right: börja vid textbredd men tillåt spill åt höger
+  margin-left: 0;
+  margin-right: -200px; // Låt wrappern spilla ut åt höger
+  overflow: visible;
+}
+
+// Container med elegant design
+.plot-container {
+  background-color: $white;
+  border: 1px solid $green-g1;
+  border-radius: 8px;
+  box-shadow: 
+    0 2px 8px 0 rgba(0, 0, 0, 0.08),
+    0 1px 3px 0 rgba(0, 0, 0, 0.06);
+  overflow: visible;
+  width: fit-content;
+  min-width: unset;
+  max-width: none;
+  padding: 1.25rem 1rem 0.75rem 1.5rem;
+  // Ta bort padding-left kompensationen
+  padding-right: 0.75rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+// Hover-effekt (borttagen för att undvika "sötrig" effekt)
+// .plot-container:hover {
+//   transform: translateY(-1px);
+//   border-color: darken($green-g1, 10%);
+//   box-shadow: 
+//     0 4px 12px 0 rgba(0, 0, 0, 0.12),
+//     0 2px 6px 0 rgba(0, 0, 0, 0.08),
+//     0 0 0 2px rgba($green-g1, 0.1);
+// }
+
+// Header för titlar
+.plot-header {
+  text-align: left;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0; // Ta bort padding, låt det linjera med rapporttext
+  position: relative;
+  width: 100%; // Säkerställ att header inte växer utöver container
+  max-width: 700px; // Begränsa till grafens bredd
+}
+
+// Plot titlar
+.plot-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: $green-g1;
+  margin: 0 0 5px 0;
+  line-height: 1.2;
+  font-family: Arial, sans-serif;
+}
+
+.plot-subtitle {
+  font-size: 14px;
+  font-weight: normal;
+  color: darken($green-g1, 5%);
+  margin: 0 0 5px 0;
+  padding: 0 0 5px 0;
+  line-height: 1.4;
+  font-family: $font-family-sans-serif;
+  border-bottom: none !important;
+}
+
+// Ta bort anchor-länk från plot-subtitle
+.plot-subtitle .anchorjs-link {
+  display: none !important;
+}
+
+// Observable plot container
+.plot-chart {
+  display: block; // Ändra från flex till block
+  width: fit-content;
+  margin: 0;
+  // Ta bort negativ margin som skulle kompensera
+}
+
+.plot-chart .observablehq {
+  display: block;
+  width: fit-content; // Lägg till detta
+}
+
+.plot-chart svg {
+  display: block;
+  max-width: none; // Ändra från 100% till none
+  height: auto;
+}
+
+// Footer för caption
+.plot-footer {
+  text-align: left;
+  margin-top: 0.5rem;
+  padding-top: 0.25rem;
+  max-width: 700px;
+  font-size: 11px;
+  color: #555555;
+  font-family: $font-family-sans-serif;
+}
+
+// Styling för Observable inputs i plot-header
+.plot-header .observablehq {
+  display: inline-block;
+  margin: 0;
+  font-family: $font-family-sans-serif;
+  font-size: 12px;
+  color: $green-g1;
+}
+
+.plot-header .observablehq form {
+  display: inline-block;
+  margin: 0;
+}
+
+// Dropdown styling i header
+.plot-header select {
+  font-size: 12px;
+  padding: 2px 8px;
+  border: 1px solid $green-g1;
+  border-radius: 4px;
+  background-color: white;
+  color: $green-g1;
+  font-family: $font-family-sans-serif;
+  cursor: pointer;
+  height: 24px;
+  min-width: 150px;
+}
+
+.plot-header select:hover {
+  border-color: darken($green-g1, 10%);
+  background-color: lighten($green-g5, 5%);
+}
+
+.plot-header select:focus {
+  outline: none;
+  border-color: darken($green-g1, 10%);
+  box-shadow: 0 0 0 2px rgba($green-g1, 0.1);
+}
+
+// Radio button styling i header
+.plot-header input[type="radio"] {
+  margin-right: 6px;
+  accent-color: $green-g1;
+  vertical-align: middle;
+}
+
+.plot-header label {
+  font-family: $font-family-sans-serif;
+  font-size: 13px;
+  color: $green-g1;
+  margin-right: 15px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+// Allmän text i Observable inputs
+.plot-header .observablehq input,
+.plot-header .observablehq label,
+.plot-header .observablehq span {
+  font-family: $font-family-sans-serif !important;
+  font-size: 13px !important;
+  color: $green-g1 !important;
+  vertical-align: middle !important;
+  line-height: 1 !important;
+}
+
+// --------------------------------------------------------------------------
+// Sidebar Navigation och Table of Contents
+// --------------------------------------------------------------------------
+#quarto-sidebar, #quarto-toc {
+  border: none;
+  box-shadow: none;
+}
+
+.sidebar-nav, #TOC>ul {
+  padding: 0.5rem 0;
+  margin: 0;
+  list-style: none;
+}
+
+// Table of Contents hierarkisk struktur
+#TOC {
+  // Huvudnivå (H1)
+  > ul > li > a {
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding-left: 1rem;
+  }
+  
+  // Andra nivån (H2)
+  > ul > li > ul > li > a {
+    padding: 0.4rem 1rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding-left: 2rem;
+  }
+  
+  // Tredje nivån (H3)
+  > ul > li > ul > li > ul > li > a {
+    padding: 0.3rem 1rem;
+    font-weight: 400;
+    font-size: 0.85rem;
+    padding-left: 3rem;
+  }
+  
+  // Fjärde nivån (H4)
+  > ul > li > ul > li > ul > li > ul > li > a {
+    padding: 0.3rem 1rem;
+    font-weight: 400;
+    font-size: 0.8rem;
+    padding-left: 4rem;
+  }
+}
+
+// Generell styling för alla TOC länkar
+#TOC li a {
+  display: block;
+  font-family: $font-family-sans-serif;
+  text-decoration: none;
+  border: none;
+  border-left: 3px solid transparent;
+  border-radius: 0 3px 3px 0;
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out, border-left-color 0.15s ease-in-out;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.4;
+  background-color: transparent;
+  color: $green-g1;
+
+  &:hover {
+    background-color: $green-g5;
+    color: $primary;
+    text-decoration: none;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba($green-g2, 0.6);
+    z-index: 1;
+    position: relative;
+  }
+
+  &.active {
+    font-weight: 600;
+    border-left-color: $green-g1;
+  }
+
+  &.active:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+// Fallback för sidebar-item länkar (om de finns)
+.sidebar-item a {
+  display: block;
+  padding: 0.5rem 1rem;
+  font-family: $font-family-sans-serif;
+  font-size: 0.9rem;
+  text-decoration: none;
+  border: none;
+  border-left: 3px solid transparent;
+  border-radius: 0 3px 3px 0;
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out, border-left-color 0.15s ease-in-out;
+  padding-left: calc(1rem - 3px);
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.4;
+  background-color: transparent;
+  color: $green-g1;
+
+  &:hover {
+    background-color: $green-g5;
+    color: $primary;
+    text-decoration: none;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba($green-g2, 0.6);
+    z-index: 1;
+    position: relative;
+  }
+
+  &.active {
+    font-weight: 600;
+    border-left-color: $green-g1;
+  }
+
+  &.active:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+// --------------------------------------------------------------------------
+// Tabset Design
+// --------------------------------------------------------------------------
+.panel-tabset {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.nav-tabs {
+  border-bottom: 2px solid $gray-light;
+  padding-left: 0;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.nav-tabs .nav-item {
+  margin-bottom: -2px;
+}
+
+.nav-tabs .nav-link {
+  border: none;
+  border-radius: 4px 4px 0 0;
+  background-color: rgba($gray-light, 0.3);
+  font-family: $font-family-sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: $gray-dark;
+  padding: 0.75rem 1.25rem;
+  margin: 0;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: $green-g1;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.2s ease-in-out;
+  }
+
+  &:hover:not(.active) {
+    color: $green-g1;
+    background-color: rgba($gray-light, 0.4);
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+    &::after {
+      transform: scaleX(0.8);
+    }
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba($green-g2, 0.3);
+    z-index: 1;
+  }
+}
+
+.nav-tabs .nav-link.active {
+  color: $green-g1;
+  font-weight: 600;
+  background-color: $white;
+
+  &::after {
+    transform: scaleX(1);
+  }
+
+  &:hover {
+    background-color: $white;
+    cursor: default;
+  }
+
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+}
+
+// --------------------------------------------------------------------------
+// Responsiv design
+// --------------------------------------------------------------------------
+@media (max-width: 768px) {
+  .plot-wrapper {
+    margin: 1.5rem 0; // Ta bort negativ margin på mobil
+    margin-right: 0; // Ingen spill åt höger på mobil
+    justify-content: center; // Centrera på mobil
+  }
+  
+  .plot-container {
+    border-radius: 0;
+    width: 100%;
+    min-width: unset;
+    max-width: 100%;
+    padding: 1.25rem 1rem 0.75rem 1rem;
+    // Reset padding-left på mobil
+    padding-left: 1rem;
+  }
+  
+  // Reset plot-chart margins på mobil
+  .plot-chart {
+    margin-left: 0;
+    padding-left: 0;
+    justify-content: center;
+  }
+  
+  .plot-title {
+    font-size: 18px;
+  }
+  
+  .plot-subtitle {
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .plot-header {
+    margin-bottom: 0.75rem;
+    padding-left: 0; // Redan inställt i huvudregeln
+  }
+  
+  .plot-chart svg {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .nav-tabs {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+  
+  .nav-tabs .nav-link {
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .plot-container {
+    // Låt container anpassa sig till innehålletpl
+  }
+}
+
+@media (min-width: 1200px) {
+  .plot-container {
+    padding: 1.5rem 2rem 1rem 2rem;
+  }
+}
+
+// --------------------------------------------------------------------------
+// Övrigt
+// --------------------------------------------------------------------------
+.fig-note {
+  font-size: 0.9em;
+  font-style: italic;
+  color: scale-color($body-color, $lightness: 25%);
+  display: block;
+  margin-top: 0.5em;
+  text-align: center;
+}
+
+.quarto-float-caption {
+  max-width: 600px;
+}
+
+h2.anchored {
+  border-bottom: none !important;
+}
+
+// Ta bort separatorlinjer för renare look
+.plot-header::after,
+.plot-footer::before {
+  display: none;
+}
+
+// Version med chevron istället
+.method-collapse {
+  border-left: 4px solid #005A4D;
+  margin: 1.5rem 0;
+  box-shadow: 0 2px 4px rgba(0, 90, 77, 0.08);
+  
+  summary {
+    background-color: #f0f7f0;
+    color: #005A4D;
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    &:hover {
+      background-color: #e5f2e5;
+    }
+    
+    &::after {
+      content: "›";  // Eller använd "❯" för en fetare chevron
+      font-size: 1.2rem;
+      font-weight: 700;
+      transition: transform 0.2s ease;
+      display: inline-block;
+    }
+  }
+  
+  &[open] summary::after {
+    transform: rotate(90deg);
+  }
+  
+  .collapse-content {
+    background-color: #fafffe;
+    padding: 1.25rem 1rem;
+    border-top: 1px solid #e5f2e5;
+    
+    p {
+      color: #002b1f;
+      line-height: 1.65;
+      margin-bottom: 1rem;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+
+// --------------------------------------------------------------------------
+// SAMMANFATTNIGN
+// --------------------------------------------------------------------------
+
+// Resultat i korthet - lägg till ljus grön bakgrund
+.results-summary {
+  background: #f8fdf8;  // Mycket ljus grön bakgrund
+  border: none;
+  padding: 1.5rem;  // Lägg till padding när vi har bakgrund
+  margin: 2rem 0;
+  width: 700px;
+  max-width: 100%;
+  border-radius: 8px;  // Mjuka hörn
+  
+  h4 {
+    color: #005A4D;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #005A4D;
+    width: 100%;
+  }
+  
+  .result-points {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  
+  .result-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
+    
+    &::before {
+      content: "▸";
+      color: #005A4D;
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+    }
+    
+    .result-context {
+      color: #005A4D;
+      font-weight: 500;
+      font-size: 1.05rem;
+      line-height: 1.5;
+    }
+  }
+}
